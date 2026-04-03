@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Untuk Nabila 💖</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+<style>
+body {
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+  padding: 40px;
+  overflow: hidden;
+
+  background: linear-gradient(270deg, #ffdde1, #ee9ca7, #ffc1cc);
+  background-size: 600% 600%;
+  animation: gradientMove 10s ease infinite;
+}
+
+@keyframes gradientMove {
+  0% {background-position: 0% 50%;}
+  50% {background-position: 100% 50%;}
+  100% {background-position: 0% 50%;}
+}
+
+h1 {
+  color: #ff2e63;
+  text-shadow: 0 0 15px #ff8fa3;
+}
+
+button {
+  padding: 12px 25px;
+  font-size: 18px;
+  margin: 10px;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+.yes { background: #ff2e63; color: white; }
+.no { background: #555; color: white; position: absolute; }
+
+.foto {
+  width: 200px;
+  border-radius: 20px;
+  margin-top: 20px;
+  box-shadow: 0 0 20px pink;
+}
+
+.bouquet-img {
+  width: 220px;
+  margin-top: 20px;
+  animation: fadeIn 1.5s forwards, glow 2s infinite alternate;
+}
+
+@keyframes glow {
+  from { filter: drop-shadow(0 0 10px pink); }
+  to { filter: drop-shadow(0 0 25px hotpink); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.8);}
+  to { opacity: 1; transform: scale(1);}
+}
+</style>
+</head>
+
+<body>
+
+<h2 id="loading">Loading perasaan...</h2>
+
+<h1 id="text" style="display:none;"></h1>
+<p id="sub"></p>
+
+<button id="btn" onclick="nextStep()" style="display:none;">Lanjut 👉</button>
+<br>
+<button onclick="playMusic()">Play Music 🎵</button>
+
+<!-- AUDIO -->
+<audio id="laguAwal" loop>
+  <source src="awal.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="laguEnding" loop>
+  <source src="ending.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+setTimeout(() => {
+  loading.style.display = "none";
+  text.style.display = "block";
+  btn.style.display = "inline-block";
+  text.innerHTML = "Hai Nabila Bailey 💖";
+}, 2000);
+
+let step = 0;
+
+function typeText(textValue, speed = 50) {
+  let i = 0;
+  sub.innerHTML = "";
+  function typing() {
+    if (i < textValue.length) {
+      sub.innerHTML += textValue.charAt(i);
+      i++;
+      setTimeout(typing, speed);
+    }
+  }
+  typing();
+}
+
+function nextStep() {
+  step++;
+
+  if (step === 1) typeText("jujur... aku agak bingung mulai dari mana 😅", 50);
+
+  else if (step === 2) typeText("soalnya ada sesuatu yang makin lama makin gak bisa aku anggap biasa aja...", 50);
+
+  else if (step === 3) typeText("anehnya... kamu sering muncul di pikiran aku tanpa alasan yang jelas 🥹", 50);
+
+  else if (step === 4) {
+    typeText("dan tiap kita ngobrol, selalu ada hal kecil yang bikin aku senyum sendiri", 50);
+
+    let img = document.createElement("img");
+    img.src = "foto.jpg";
+    img.className = "foto";
+    document.body.appendChild(img);
+  }
+
+  else if (step === 5) typeText("jujur aja, gak tau ini bakal jadi apa...", 50);
+
+  else if (step === 6) typeText("dan jujur... aku sempet mikir buat gak bilang ini 😅", 50);
+
+  else if (step === 7) typeText("tapi aku juga gak mau kehilangan kesempatan buat jujur", 50);
+
+  else if (step === 8) typeText("jadi hari ini aku pilih berani...", 50);
+
+  else if (step === 9) typeText("dan tanpa aku sadar... perasaan itu berubah jadi sesuatu yang lebih dari sekadar nyaman", 60);
+
+  else if (step === 10) typeText("dan kayaknya... aku jatuh hati sama kamu, Nabila Bailey 💖", 60);
+
+  else if (step === 11) {
+    typeText("kalau kamu ngerasa hal yang sama...", 50);
+
+    setTimeout(() => {
+      typeText("kamu mau gak kita coba jalanin ini pelan-pelan? 🥹", 60);
+    }, 1500);
+
+    document.body.innerHTML += `
+    <br>
+    <button class="yes" onclick="yesAnswer()">Mau ❤️</button>
+    <button class="no" onmouseover="moveButton(this)">Gak 😈</button>
+    `;
+  }
+}
+
+function moveButton(btn) {
+  btn.style.top = Math.random() * 80 + "%";
+  btn.style.left = Math.random() * 80 + "%";
+}
+
+function playMusic() {
+  laguAwal.volume = 0.5;
+  laguAwal.play();
+}
+
+/* 💐 FINAL */
+function yesAnswer() {
+
+  let fadeOut = setInterval(() => {
+    if (laguAwal.volume > 0.05) {
+      laguAwal.volume -= 0.05;
+    } else {
+      clearInterval(fadeOut);
+      laguAwal.pause();
+
+      laguEnding.volume = 0;
+      laguEnding.play();
+
+      let fadeIn = setInterval(() => {
+        if (laguEnding.volume < 0.5) {
+          laguEnding.volume += 0.05;
+        } else {
+          clearInterval(fadeIn);
+        }
+      }, 200);
+    }
+  }, 200);
+
+  document.body.innerHTML = `
+    <h1>Nabila Bailey 💖</h1>
+
+    <p style="font-size:18px;">
+      makasih udah bilang iya... 🥹❤️
+    </p>
+
+    <img src="bouquet.png" class="bouquet-img">
+
+    <p style="margin-top:20px;">
+      mungkin ini sederhana...<br>
+      tapi buat aku, ini berarti banyak 💖<br><br>
+      dan kalau kamu izinin,<br>
+      aku pengen jadi bagian dari cerita kamu ✨
+    </p>
+
+    <p style="font-size:14px; opacity:0.8;">
+      (ini bakal jadi salah satu hari favorit aku 😊)
+    </p>
+  `;
+
+  fireworks();
+}
+
+/* 💖 FIREWORK */
+function fireworks() {
+  setInterval(() => {
+    let f = document.createElement("div");
+    f.innerHTML = "💖";
+    f.style.position = "fixed";
+    f.style.left = Math.random() * 100 + "vw";
+    f.style.top = Math.random() * 100 + "vh";
+    f.style.fontSize = "20px";
+    document.body.appendChild(f);
+    setTimeout(() => f.remove(), 1000);
+  }, 200);
+}
+
+/* 🌸 FLOWERS */
+setInterval(() => {
+  let flower = document.createElement("div");
+  flower.innerHTML = "🌸";
+  flower.style.position = "fixed";
+  flower.style.top = "-10px";
+  flower.style.left = Math.random() * 100 + "vw";
+  flower.style.animation = "fall 6s linear";
+  document.body.appendChild(flower);
+  setTimeout(() => flower.remove(), 6000);
+}, 250);
+</script>
+
+<style>
+@keyframes fall {
+  to { transform: translateY(110vh); }
+}
+</style>
+
+</body>
+</html>
