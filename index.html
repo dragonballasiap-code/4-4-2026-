@@ -6,48 +6,70 @@
 <title>Untuk Nabila 💖</title>
 
 <style>
-body {
+html, body{
   margin:0;
-  font-family: Arial;
-  text-align:center;
+  padding:0;
+  height:100%;
+  font-family: 'Segoe UI', sans-serif;
   color:white;
+  text-align:center;
   overflow:hidden;
-
-  background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #ffdde1);
-  background-size: 400% 400%;
-  animation: gradient 10s ease infinite;
 }
 
-@keyframes gradient {
-  0% {background-position:0% 50%;}
-  50% {background-position:100% 50%;}
-  100% {background-position:0% 50%;}
+/* 🌸 BACKGROUND HIDUP */
+body{
+  background: linear-gradient(-45deg,#ff758c,#ff7eb3,#ff4d6d,#ff8fa3);
+  background-size:400% 400%;
+  animation: bg 10s ease infinite;
 }
 
-.container {
-  height:100vh;
+@keyframes bg{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+
+/* overlay biar teks jelas */
+body::after{
+  content:"";
+  position:fixed;
+  top:0;left:0;
+  width:100%;height:100%;
+  background:rgba(0,0,0,0.25);
+  pointer-events:none;
+}
+
+/* container */
+.container{
+  min-height:100vh;
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
   padding:20px;
-  animation: fade 1s ease;
+  animation:fade 1s ease;
 }
 
-@keyframes fade {
-  from {opacity:0; transform: translateY(20px);}
-  to {opacity:1; transform: translateY(0);}
+@keyframes fade{
+  from{opacity:0; transform:translateY(20px)}
+  to{opacity:1; transform:translateY(0)}
 }
 
-h1 { font-size:28px; }
+/* teks */
+h1{
+  font-size:32px;
+  text-shadow:0 4px 20px rgba(0,0,0,0.6);
+}
 
-p {
+p{
   font-size:20px;
-  max-width:350px;
+  max-width:340px;
   line-height:1.8;
+  text-shadow:0 3px 15px rgba(0,0,0,0.6);
 }
 
-button {
+/* tombol */
+button{
   margin-top:25px;
   padding:12px 25px;
   border:none;
@@ -55,25 +77,29 @@ button {
   background:white;
   color:#ff4d6d;
   font-weight:bold;
-  cursor:pointer;
+  width:80%;
+  max-width:280px;
 }
 
-img {
+/* foto */
+img{
   width:220px;
   border-radius:15px;
   margin-top:20px;
-  box-shadow:0 0 20px rgba(255,255,255,0.6);
+  box-shadow:0 0 25px rgba(255,255,255,0.6);
 }
 
-.heart {
+/* bunga jatuh */
+.flower{
   position:fixed;
-  color:pink;
-  animation: float 5s linear infinite;
+  top:-10px;
+  animation:fall linear forwards;
 }
 
-@keyframes float {
-  from {transform:translateY(100vh);}
-  to {transform:translateY(-10vh);}
+@keyframes fall{
+  to{
+    transform:translateY(100vh) rotate(360deg);
+  }
 }
 </style>
 </head>
@@ -81,10 +107,9 @@ img {
 <body>
 
 <div class="container" id="main">
-  <h1 id="title">Hai Nabila Bailey 💖</h1>
+  <h1>Hai Nabila Bailey 💖</h1>
   <p id="text"></p>
-
-  <button onclick="next()">Mulai 👉</button>
+  <button id="btn" onclick="next()">Mulai 👉</button>
 </div>
 
 <audio id="lagu1" src="awal.mp3"></audio>
@@ -92,61 +117,64 @@ img {
 
 <script>
 const text = document.getElementById("text");
+const btn = document.getElementById("btn");
 const lagu1 = document.getElementById("lagu1");
 const lagu2 = document.getElementById("lagu2");
 
 let step = 0;
 
+const lines = [
+"jujur... aku agak bingung mulai dari mana 😅",
+"soalnya ada sesuatu yang gak bisa aku anggap biasa lagi...",
+"anehnya... kamu sering muncul di pikiran aku 🥹",
+"dan tiap kita ngobrol, selalu ada hal kecil yang bikin aku senyum",
+"jujur aja... aku gak tau ini bakal jadi apa",
+"tapi aku gak mau kehilangan kesempatan buat jujur",
+"dan tanpa aku sadar... aku mulai jatuh hati sama kamu 💖",
+"kalau kamu ngerasa hal yang sama...",
+"kamu mau gak kita coba jalanin ini pelan-pelan? 🥹"
+];
+
+/* efek ketik */
+function typeText(teks){
+  text.innerHTML = "";
+  let i=0;
+  let interval = setInterval(()=>{
+    text.innerHTML += teks.charAt(i);
+    i++;
+    if(i>=teks.length) clearInterval(interval);
+  },30);
+}
+
 function next(){
+  btn.innerHTML = "Lanjut 👉";
   step++;
 
   if(step === 1){
     lagu1.volume = 0.5;
     lagu1.play().catch(()=>{});
-    text.innerHTML = "jujur... aku agak bingung mulai dari mana 😅";
   }
 
-  else if(step === 2){
-    text.innerHTML = "soalnya ada sesuatu yang gak bisa aku anggap biasa lagi...";
+  if(step <= lines.length){
+    typeText(lines[step-1]);
   }
 
-  else if(step === 3){
-    text.innerHTML = "anehnya... kamu sering muncul di pikiran aku 🥹";
-  }
-
-  else if(step === 4){
-    text.innerHTML = "dan tiap kita ngobrol, selalu ada hal kecil yang bikin aku senyum";
+  if(step === 4){
     let img = document.createElement("img");
-    img.src = "foto.jpg";
+    img.src="foto.jpg";
     document.getElementById("main").appendChild(img);
   }
 
-  else if(step === 5){
-    text.innerHTML = "jujur aja... aku gak tau ini bakal jadi apa";
-  }
-
-  else if(step === 6){
-    text.innerHTML = "tapi aku juga gak mau kehilangan kesempatan buat jujur";
-  }
-
-  else if(step === 7){
-    text.innerHTML = "dan tanpa aku sadar... aku mulai jatuh hati sama kamu 💖";
-  }
-
-  else if(step === 8){
-    text.innerHTML = "kalau kamu ngerasa hal yang sama...";
-  }
-
-  else if(step === 9){
-    text.innerHTML = "kamu mau gak kita coba jalanin ini pelan-pelan? 🥹";
+  if(step === lines.length){
+    btn.style.display="none";
 
     let yesBtn = document.createElement("button");
-    yesBtn.innerHTML = "Mau ❤️";
-    yesBtn.onclick = yes;
+    yesBtn.innerHTML="Mau ❤️";
+    yesBtn.onclick=yes;
 
     let noBtn = document.createElement("button");
-    noBtn.innerHTML = "Gak 😈";
-    noBtn.onmouseover = () => kabur(noBtn);
+    noBtn.innerHTML="Gak 😈";
+    noBtn.onmouseover=()=>kabur(noBtn);
 
     document.getElementById("main").appendChild(yesBtn);
     document.getElementById("main").appendChild(noBtn);
@@ -154,33 +182,33 @@ function next(){
 }
 
 function kabur(btn){
-  btn.style.position = "absolute";
-  btn.style.top = Math.random()*80 + "%";
-  btn.style.left = Math.random()*80 + "%";
+  btn.style.position="absolute";
+  btn.style.top=Math.random()*80+"%";
+  btn.style.left=Math.random()*80+"%";
 }
 
 function yes(){
 
   // fade lagu1
-  let fade = setInterval(()=>{
-    if(lagu1.volume > 0.05){
-      lagu1.volume -= 0.05;
-    } else {
+  let fade=setInterval(()=>{
+    if(lagu1.volume>0.05){
+      lagu1.volume-=0.05;
+    }else{
       clearInterval(fade);
       lagu1.pause();
 
-      lagu2.volume = 0;
+      lagu2.volume=0;
       lagu2.play().catch(()=>{});
 
-      let fadeIn = setInterval(()=>{
-        if(lagu2.volume < 0.5){
-          lagu2.volume += 0.05;
-        } else clearInterval(fadeIn);
+      let fadeIn=setInterval(()=>{
+        if(lagu2.volume<0.6){
+          lagu2.volume+=0.05;
+        }else clearInterval(fadeIn);
       },200);
     }
   },200);
 
-  document.body.innerHTML = `
+  document.body.innerHTML=`
   <div class="container">
     <h1>Nabila Bailey 💖</h1>
     <p>makasih udah bilang iya... 🥹❤️</p>
@@ -193,19 +221,21 @@ function yes(){
   </div>
   `;
 
-  fireworks();
+  flowers();
 }
 
-// efek hati
-function fireworks(){
+/* efek bunga jatuh */
+function flowers(){
   setInterval(()=>{
-    let h = document.createElement("div");
-    h.className = "heart";
-    h.innerHTML = "💖";
-    h.style.left = Math.random()*100+"vw";
-    document.body.appendChild(h);
-    setTimeout(()=>h.remove(),5000);
-  },300);
+    let f=document.createElement("div");
+    f.className="flower";
+    f.innerHTML="🌸";
+    f.style.left=Math.random()*100+"vw";
+    f.style.fontSize=(Math.random()*20+15)+"px";
+    f.style.animationDuration=(Math.random()*3+3)+"s";
+    document.body.appendChild(f);
+    setTimeout(()=>f.remove(),6000);
+  },200);
 }
 </script>
 
