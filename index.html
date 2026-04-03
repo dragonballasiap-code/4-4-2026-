@@ -10,59 +10,64 @@
       margin: 0;
       padding: 0;
       font-family: Arial, sans-serif;
-      background: #f7a8b8;
-      overflow: hidden;
+      background: linear-gradient(#f8a5c2, #f78fb3);
       text-align: center;
+      overflow-x: hidden;
+      color: white;
     }
 
     .container {
-      margin-top: 80px;
-      color: #fff;
+      padding: 60px 20px;
+      min-height: 100vh;
     }
 
     h1 {
-      font-size: 26px;
+      font-size: 28px;
     }
 
     p {
-      width: 80%;
+      max-width: 420px;
       margin: auto;
-      font-size: 16px;
-      line-height: 1.6;
+      font-size: 18px;
+      line-height: 1.8;
+    }
+
+    @media (max-width: 480px) {
+      p {
+        font-size: 19px;
+      }
     }
 
     button {
-      margin-top: 20px;
+      margin: 10px;
       padding: 10px 20px;
       border: none;
       border-radius: 20px;
-      background: #fff;
+      background: white;
       color: #f06292;
       font-weight: bold;
       cursor: pointer;
     }
 
     img {
-      width: 180px;
+      width: 70%;
+      max-width: 260px;
       border-radius: 15px;
       margin-top: 20px;
+      box-shadow: 0 0 25px rgba(255,255,255,0.6);
+      transition: transform 0.3s;
+    }
+
+    img:hover {
+      transform: scale(1.05);
     }
 
     .hidden {
       display: none;
     }
 
-    .hearts {
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      pointer-events: none;
-    }
-
     .heart {
-      position: absolute;
+      position: fixed;
       color: pink;
       animation: float 6s linear infinite;
     }
@@ -70,6 +75,18 @@
     @keyframes float {
       from { transform: translateY(100vh); }
       to { transform: translateY(-10vh); }
+    }
+
+    .footer {
+      margin-top: 60px;
+      font-size: 14px;
+      opacity: 0.8;
+      animation: fadeIn 3s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 0.8;}
     }
   </style>
 </head>
@@ -79,23 +96,17 @@
 <div class="container" id="page1">
   <h1>Hai Nabila Bailey 💖</h1>
 
-  <p>
-    Awalnya aku gak tau kenapa setiap aku dekat kamu,<br><br>
-    rasanya beda dari yang lain.<br><br>
-
-    Pelan-pelan aku sadar,<br>
-    perasaan ini bukan cuma sekadar nyaman…<br><br>
-
-    tapi sesuatu yang lebih dari itu.<br><br>
-
-    Aku suka kamu 🙂
-  </p>
+  <p id="typing"></p>
 
   <button onclick="nextPage()">Lanjut 👉</button><br>
-
   <button onclick="playMusic()">Play Music 🎵</button><br>
 
   <img src="foto.jpg">
+
+  <div class="footer">
+    <hr style="width:60%; margin:25px auto; border:0.5px solid white;">
+    semoga ini bisa bikin kamu senyum hari ini 😊
+  </div>
 </div>
 
 <div class="container hidden" id="page2">
@@ -104,16 +115,48 @@
   <p>
     Aku gak mau buru-buru.<br><br>
     Kalau kamu juga ngerasa hal yang sama,<br><br>
-
     kita jalanin pelan-pelan aja ya… 💖
   </p>
+
+  <p style="margin-top:20px;">
+    makasih ya udah baca sampai sini 😊
+  </p>
+
+  <div style="margin-top:20px;">
+    <button onclick="jawab('yes')">Aku juga 💖</button>
+    <button onclick="kabur(this)">Hmm… 😅</button>
+  </div>
+
+  <p id="response" style="margin-top:20px;"></p>
 </div>
 
 <audio id="music" src="awal.mp3"></audio>
 
-<div class="hearts" id="hearts"></div>
-
 <script>
+  const text = `Awalnya aku gak tau kenapa setiap aku dekat kamu...
+
+rasanya beda dari yang lain.
+
+Pelan-pelan aku sadar,
+perasaan ini bukan cuma sekadar nyaman…
+
+tapi sesuatu yang lebih dari itu.
+
+dan kayaknya...
+aku gak bisa pura-pura lagi 🙂
+
+Aku suka kamu 💖`;
+
+  let i = 0;
+  function typing() {
+    if (i < text.length) {
+      document.getElementById("typing").innerHTML += text.charAt(i);
+      i++;
+      setTimeout(typing, 50);
+    }
+  }
+  typing();
+
   function nextPage() {
     document.getElementById("page1").classList.add("hidden");
     document.getElementById("page2").classList.remove("hidden");
@@ -123,6 +166,19 @@
     document.getElementById("music").play();
   }
 
+  function jawab(type) {
+    if (type === 'yes') {
+      document.getElementById("response").innerHTML =
+      "jujur aku seneng banget bacanya 😊💖";
+    }
+  }
+
+  function kabur(btn) {
+    btn.style.position = "absolute";
+    btn.style.top = Math.random() * window.innerHeight + "px";
+    btn.style.left = Math.random() * window.innerWidth + "px";
+  }
+
   function createHeart() {
     const heart = document.createElement("div");
     heart.classList.add("heart");
@@ -130,14 +186,14 @@
     heart.style.left = Math.random() * 100 + "vw";
     heart.style.fontSize = (Math.random() * 20 + 10) + "px";
 
-    document.getElementById("hearts").appendChild(heart);
+    document.body.appendChild(heart);
 
     setTimeout(() => {
       heart.remove();
     }, 6000);
   }
 
-  setInterval(createHeart, 300);
+  setInterval(createHeart, 400);
 </script>
 
 </body>
