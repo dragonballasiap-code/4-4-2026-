@@ -36,8 +36,6 @@ body::after{
   width:100%;
   height:100%;
   background:rgba(0,0,0,0.45);
-  top:0;
-  left:0;
 }
 
 .container{
@@ -59,18 +57,9 @@ body::after{
   max-width:320px;
 }
 
-h1{
-  font-size:30px;
-  font-weight:700;
-}
+h1{font-size:30px;font-weight:700;}
+p{font-size:20px;line-height:1.9;font-weight:300;}
 
-p{
-  font-size:20px;
-  line-height:1.9;
-  font-weight:300;
-}
-
-/* button */
 button{
   margin-top:20px;
   padding:12px 25px;
@@ -81,46 +70,48 @@ button{
   font-weight:bold;
   width:80%;
   max-width:280px;
-  box-shadow:0 5px 20px rgba(0,0,0,0.3);
 }
 
-/* foto tengah */
+/* FOTO */
 .center-img{
   width:240px;
   border-radius:18px;
   margin-top:20px;
-  box-shadow:0 10px 40px rgba(0,0,0,0.5);
   animation:fadeIn 1s ease;
 }
 
+.memory-img{
+  width:170px;
+  border-radius:12px;
+  margin-top:10px;
+  opacity:0.9;
+  animation:fadeIn 0.6s ease;
+}
+
 @keyframes fadeIn{
-  from{opacity:0; transform:translateY(-30px)}
+  from{opacity:0; transform:translateY(20px)}
   to{opacity:1; transform:translateY(0)}
 }
 
-/* foto jatuh */
+/* FOTO JATUH */
 .photo-fall{
   position:fixed;
   top:-100px;
-  border-radius:12px;
   opacity:0.75;
-  z-index:0;
-  animation: fallPhoto linear forwards;
+  animation:fallPhoto linear forwards;
 }
-
 @keyframes fallPhoto{
-  to{ transform: translateY(110vh) rotate(360deg); }
+  to{transform:translateY(110vh) rotate(360deg);}
 }
 
-/* love */
+/* LOVE */
 .fall{
   position:fixed;
   top:-10px;
-  animation: fall linear forwards;
+  animation:fall linear forwards;
 }
-
 @keyframes fall{
-  to{ transform: translateY(100vh) rotate(360deg); }
+  to{transform:translateY(100vh) rotate(360deg);}
 }
 </style>
 </head>
@@ -144,24 +135,28 @@ const btn = document.getElementById("btn");
 const lagu1 = document.getElementById("lagu1");
 const lagu2 = document.getElementById("lagu2");
 
-let step = 0;
-let isTyping = false;
+let step=0;
+let isTyping=false;
 
-/* TEKS */
-const lines = [
+/* 💖 TEKS */
+const lines=[
 "jujur... aku sempet mikir lama sebelum bikin ini 😅",
 "soalnya ini bukan hal kecil buat aku...",
 "jujur... aku juga sempet takut kalau ini malah bikin semuanya berubah 😅",
-"dan mungkin kata-kata ini gak akan sesempurna yang aku rasain",
 "tapi setiap kita ngobrol, selalu ada sesuatu yang bikin aku nyaman 🥹",
 "hal kecil, tapi cukup buat bikin aku senyum sendiri",
-"anehnya... kamu sering tiba-tiba kepikiran tanpa alasan",
+"anehnya... kamu sering tiba-tiba kepikiran",
 "dan dari situ aku mulai sadar...",
-"dan entah sejak kapan... perasaan itu berubah jadi sesuatu yang lebih dalam 💖",
-"...dan mungkin ini pertama kalinya aku seberani ini untuk seseorang 🥹",
+"perasaan ini bukan sekadar biasa",
 "",
-"aku gak mau maksa, dan gak mau bikin kamu gak nyaman",
-"aku cuma pengen jujur sama apa yang aku rasain",
+"dan dari semua momen kecil itu...",
+"aku sadar ada banyak hal yang gak bisa aku lupain 🥹",
+"semua kenangan itu pelan-pelan jadi sesuatu yang berarti",
+"dan entah kenapa... semuanya selalu tentang kamu 💖",
+"mungkin dari situ semuanya mulai terasa beda",
+"",
+"aku mulai jatuh hati sama kamu 💖",
+"...dan mungkin ini pertama kalinya aku seberani ini untuk seseorang 🥹",
 "",
 "jadi... kalau kamu ngerasa hal yang sama",
 "kamu mau gak kita jalanin ini pelan-pelan? 🥹"
@@ -185,16 +180,33 @@ function typeText(teks){
   },35);
 }
 
-/* DYNAMIC DELAY */
-let waitTimes = [
-2000,1500,1400,1500,1500,1400,1500,1500,1800,2000,
-1500,1500,1500,2000,2300
+/* MEMORY 11 FOTO */
+const memoryPhotos=[
+"kenangan1.jpg","kenangan2.jpg","kenangan3.jpg","kenangan4.jpg","kenangan5.jpg",
+"kenangan6.jpg","kenangan7.jpg","kenangan8.jpg","kenangan9.jpg","kenangan10.jpg","kenangan11.jpg"
 ];
 
+function showMemory(index){
+  let img=document.createElement("img");
+  img.src=memoryPhotos[index];
+  img.className="memory-img";
+
+  document.getElementById("main").appendChild(img);
+
+  // maksimal tampil 3 (biar clean)
+  let all=document.querySelectorAll(".memory-img");
+  if(all.length>3){
+    all[0].remove();
+  }
+}
+
+/* DELAY */
+let waitTimes=new Array(25).fill(1500);
+
+/* NEXT */
 function next(){
   if(isTyping) return;
 
-  btn.innerHTML="Lanjut 👉";
   step++;
   isTyping=true;
 
@@ -205,132 +217,71 @@ function next(){
   }
 
   if(step<=lines.length){
-    setTimeout(()=>{typeText(lines[step-1])},200);
+    typeText(lines[step-1]);
   }
 
-  if(step===5){
+  if(step===4){
     let img=document.createElement("img");
     img.src="foto.jpg";
     img.className="center-img";
     document.getElementById("main").appendChild(img);
   }
 
+  // memory muncul bertahap
+  let memoryStart=9;
+  if(step>=memoryStart && step<memoryStart+memoryPhotos.length){
+    showMemory(step-memoryStart);
+  }
+
   if(step===lines.length){
     btn.style.display="none";
 
-    let yesBtn=document.createElement("button");
-    yesBtn.innerHTML="Mau ❤️";
-    yesBtn.onclick=yes;
+    let yes=document.createElement("button");
+    yes.innerHTML="Mau ❤️";
+    yes.onclick=yesClick;
 
-    let noBtn=document.createElement("button");
-    noBtn.innerHTML="Gak 😈";
-    noBtn.onmouseover=()=>kabur(noBtn);
-
-    document.getElementById("main").appendChild(yesBtn);
-    document.getElementById("main").appendChild(noBtn);
+    document.getElementById("main").appendChild(yes);
   }
 
-  let delay = waitTimes[step-1] || 1500;
-  setTimeout(()=>{isTyping=false}, delay);
+  setTimeout(()=>{isTyping=false},waitTimes[step]||1500);
 }
 
-function kabur(btn){
-  btn.style.position="absolute";
-  btn.style.top=Math.random()*80+"%";
-  btn.style.left=Math.random()*80+"%";
-}
-
-/* FOTO */
-let photoInterval;
-const photos=["foto1.jpg","foto2.jpg","foto3.jpg","foto4.jpg","foto5.jpg","foto6.jpg"];
-
-function photoRain(){
-  photoInterval=setInterval(()=>{
-    let img=document.createElement("img");
-    img.src=photos[Math.floor(Math.random()*photos.length)];
-    img.className="photo-fall";
-    img.style.left=Math.random()*100+"vw";
-    img.style.animationDuration=(Math.random()*4+4)+"s";
-    img.style.width=(Math.random()*30+50)+"px";
-    document.body.appendChild(img);
-    setTimeout(()=>img.remove(),8000);
-  },1200);
-}
-
-/* LOVE */
-function loveRain(){
-  setInterval(()=>{
-    let el=document.createElement("div");
-    el.className="fall";
-    el.innerHTML=Math.random()>0.5?"💖":"🌸";
-    el.style.left=Math.random()*100+"vw";
-    el.style.fontSize=(Math.random()*20+15)+"px";
-    el.style.animationDuration=(Math.random()*3+2)+"s";
-    document.body.appendChild(el);
-    setTimeout(()=>el.remove(),7000);
-  },300);
-}
+/* FOTO JATUH */
+setInterval(()=>{
+  let img=document.createElement("img");
+  img.src=memoryPhotos[Math.floor(Math.random()*memoryPhotos.length)];
+  img.className="photo-fall";
+  img.style.left=Math.random()*100+"vw";
+  img.style.width="50px";
+  img.style.animationDuration="5s";
+  document.body.appendChild(img);
+  setTimeout(()=>img.remove(),6000);
+},1500);
 
 /* YES */
-function yes(){
+function yesClick(){
 
-  clearInterval(photoInterval);
-  document.querySelectorAll(".photo-fall").forEach(el=>el.remove());
-  loveRain();
+  document.body.innerHTML=`
+  <div class="container">
+    <div class="text-box">
+      <h1>Nabila Bailey 💖</h1>
+      <p>
+        thank you for saying yes... 🥹❤️<br><br>
 
-  let fade=setInterval(()=>{
-    if(lagu1.volume>0.05){
-      lagu1.volume-=0.05;
-    } else {
-      clearInterval(fade);
-      lagu1.pause();
+        I’m sorry I couldn’t say this directly,<br>
+        but I truly mean everything 🤍<br><br>
 
-      lagu2.currentTime=50;
-      lagu2.volume=0;
-      lagu2.play().catch(()=>{});
+        I’ll always try my best for you 💖<br><br>
 
-      let fadeIn=setInterval(()=>{
-        if(lagu2.volume<0.6){
-          lagu2.volume+=0.05;
-        } else clearInterval(fadeIn);
-      },150);
-    }
-  },150);
+        let’s take this slowly… together ✨<br><br>
 
-  setTimeout(()=>{
-    document.body.innerHTML=`
-    <div class="container">
-      <div class="text-box">
-        <h1>Nabila Bailey 💖</h1>
-        <p>
-          thank you for saying yes... 🥹❤️<br><br>
-
-          honestly, I still can’t believe we’re here right now,<br>
-          a moment I used to only imagine in my head 💭<br><br>
-
-          I’m sorry I couldn’t say all of this to you directly...<br>
-          but please know that I truly mean every single word 🤍<br><br>
-
-          I might not be perfect,<br>
-          but I’ll always try my best for you,<br>
-          and for whatever we’re starting today 💖<br><br>
-
-          let’s take this slowly… together ✨<br><br>
-
-          and I’m really glad… it’s you 💖<br><br>
-
-          <span style="font-size:13px;opacity:0.7;">
-            this might be simple… but it’s real 💖
-          </span>
-        </p>
-      </div>
-      <img src="bouquet.png">
+        and I’m really glad… it’s you 💖
+      </p>
     </div>
-    `;
-  },800);
+    <img src="bouquet.png">
+  </div>
+  `;
 }
-
-photoRain();
 </script>
 
 </body>
