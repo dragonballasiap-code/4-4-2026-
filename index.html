@@ -13,7 +13,7 @@ body{margin:0;font-family:'Poppins',sans-serif;color:white;overflow:hidden}
 /* INTRO */
 #intro{position:fixed;inset:0;background:black;display:flex;justify-content:center;align-items:center;flex-direction:column;z-index:999}
 
-/* BACKGROUND */
+/* BG */
 #bg-layer{
 position:fixed;inset:0;z-index:0;
 background:linear-gradient(-45deg,#ff4d6d,#c9184a,#ff758f,#ff8fa3);
@@ -30,7 +30,7 @@ background:radial-gradient(circle, rgba(255,182,193,0.15), rgba(0,0,0,0.7));
 100%{background-position:0% 50%;}
 }
 
-/* LAYER */
+/* LAYERS */
 #falling-layer,#emoji-layer{position:fixed;inset:0;pointer-events:none}
 #falling-layer{z-index:1}
 #emoji-layer{z-index:2}
@@ -83,12 +83,15 @@ transition:1s ease;
 
 /* BOUQUET */
 .bouquet{
-position:fixed;right:10px;bottom:10px;
-width:35%;max-width:220px;
-opacity:0;
-transform:translateY(40px) scale(0.9);
+position:fixed;
+right:10px;
+bottom:0;
+width:30%;
+max-width:180px;
+opacity:0.85;
+transform:translateY(60px) scale(0.9);
 animation:bouquetIn 1s ease forwards,floatSoft 5s ease-in-out infinite;
-z-index:4;
+z-index:2;
 }
 @keyframes bouquetIn{to{opacity:1;transform:translateY(0) scale(1);}}
 @keyframes floatSoft{
@@ -97,7 +100,7 @@ z-index:4;
 100%{transform:translateY(0);}
 }
 
-/* LOVE POPUP */
+/* POPUP */
 #lovePopup{
 position:fixed;top:50%;left:50%;
 transform:translate(-50%,-50%) scale(0.8);
@@ -144,7 +147,7 @@ const emojiLayer=document.getElementById("emoji-layer");
 
 let index=0,check,started=false,fallInterval;
 
-/* INTRO TEXT */
+/* INTRO */
 const introLines=[
 "before this starts...",
 "read it slowly... okay? 🤍",
@@ -152,7 +155,7 @@ const introLines=[
 "I made this for you"
 ];
 
-/* SYNC TIMELINE */
+/* TIMELINE */
 const timeline=[
 {time:1.5,text:"hey... can you stay for a moment? 🥹"},
 {time:5,text:"aku bikin ini bukan karena iseng..."},
@@ -180,9 +183,7 @@ function showIntroText(){
 let i=0;
 
 content.innerHTML=`
-<div class="text-box">
-<p id="introText"></p>
-</div>
+<div class="text-box"><p id="introText"></p></div>
 <div id="photo-slot"></div>
 `;
 
@@ -216,7 +217,10 @@ setTimeout(startStory,1600);
 nextLine();
 }
 
-let displayOffset=350;
+/* SYNC */
+let displayOffset=400;
+let minGap=2700;
+let lastShown=0;
 
 function startStory(){
 startFalling();
@@ -226,17 +230,21 @@ syncStory();
 function syncStory(){
 check=setInterval(()=>{
 let current=lagu1.currentTime;
+let now=Date.now();
 
 if(index<timeline.length && current>=timeline[index].time){
+if(now-lastShown>=minGap){
 setTimeout(()=>{
 showLine(timeline[index].text);
 },displayOffset);
+lastShown=now;
 index++;
+}
 }
 
 if(index>=timeline.length){
 clearInterval(check);
-setTimeout(showChoice,2800);
+setTimeout(showChoice,3200);
 }
 },200);
 }
@@ -258,6 +266,7 @@ let slot=document.getElementById("photo-slot");
 if(photo&&slot)slot.appendChild(photo);
 }
 
+/* FALL */
 function startFalling(){
 fallInterval=setInterval(()=>{
 let img=document.createElement("img");
@@ -276,6 +285,7 @@ clearInterval(fallInterval);
 fallingLayer.innerHTML="";
 }
 
+/* EMOJI */
 function startEmoji(){
 setInterval(()=>{
 let el=document.createElement("div");
@@ -289,6 +299,7 @@ setTimeout(()=>el.remove(),7000);
 },1500);
 }
 
+/* CHOICE */
 function showChoice(){
 content.innerHTML=`
 <div class="text-box">
@@ -323,8 +334,16 @@ content.innerHTML=`
 attachPhoto();
 }
 
-function showLoveSequence(){
+/* BOUQUET */
+function showBouquet(){
+let img=document.createElement("img");
+img.src="bouquet.png";
+img.className="bouquet";
+document.body.appendChild(img);
+}
 
+/* POPUP */
+function showLoveSequence(){
 const texts=[
 "Love you 💕💕💕",
 "Love you more 💐💖💕",
@@ -355,10 +374,10 @@ document.body.appendChild(popup);
 i++;
 setTimeout(next,2000);
 }
-
 next();
 }
 
+/* ENDING */
 function finalYes(){
 stopFalling();
 startEmoji();
@@ -393,14 +412,23 @@ and yeah... I’m really glad it’s you 🤍
 </div>
 
 <button onclick="showMemory()">Kenangan 💖</button>
-<img src="bouquet.png" class="bouquet">
 `;
 
-setTimeout(showLoveSequence,4500);
+let text=content.innerText;
+let words=text.split(" ").length;
+let readingTime=(words/200)*60*1000;
+
+let delay=readingTime+1200;
+
+setTimeout(()=>{
+showBouquet();
+showLoveSequence();
+},delay);
 
 },1500);
 }
 
+/* MEMORY */
 function showMemory(){
 let i=0;
 content.innerHTML=`
