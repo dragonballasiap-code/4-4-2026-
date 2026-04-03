@@ -1,199 +1,156 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Special Day 💖</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(#f8a5c2, #f78fb3);
-      text-align: center;
-      overflow-x: hidden;
-      color: white;
-    }
+<title>Special Day 💖</title>
 
-    .container {
-      padding: 60px 20px;
-      min-height: 100vh;
-    }
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: linear-gradient(#f8a5c2, #f78fb3);
+  color: white;
+  text-align: center;
+  overflow: hidden;
+}
 
-    h1 {
-      font-size: 28px;
-    }
+.screen {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px;
+}
 
-    p {
-      max-width: 420px;
-      margin: auto;
-      font-size: 18px;
-      line-height: 1.8;
-    }
+h1 {
+  font-size: 28px;
+}
 
-    @media (max-width: 480px) {
-      p {
-        font-size: 19px;
-      }
-    }
+p {
+  font-size: 20px;
+  line-height: 1.8;
+  max-width: 400px;
+  margin: auto;
+}
 
-    button {
-      margin: 10px;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 20px;
-      background: white;
-      color: #f06292;
-      font-weight: bold;
-      cursor: pointer;
-    }
+button {
+  margin-top: 30px;
+  padding: 10px 20px;
+  border-radius: 20px;
+  border: none;
+  background: white;
+  color: #f06292;
+  font-weight: bold;
+}
 
-    img {
-      width: 70%;
-      max-width: 260px;
-      border-radius: 15px;
-      margin-top: 20px;
-      box-shadow: 0 0 25px rgba(255,255,255,0.6);
-      transition: transform 0.3s;
-    }
+.hidden {
+  display: none;
+}
 
-    img:hover {
-      transform: scale(1.05);
-    }
+img {
+  width: 250px;
+  border-radius: 15px;
+  margin-top: 20px;
+  box-shadow: 0 0 25px rgba(255,255,255,0.6);
+}
 
-    .hidden {
-      display: none;
-    }
+.heart {
+  position: fixed;
+  color: pink;
+  animation: float 6s linear infinite;
+}
 
-    .heart {
-      position: fixed;
-      color: pink;
-      animation: float 6s linear infinite;
-    }
-
-    @keyframes float {
-      from { transform: translateY(100vh); }
-      to { transform: translateY(-10vh); }
-    }
-
-    .footer {
-      margin-top: 60px;
-      font-size: 14px;
-      opacity: 0.8;
-      animation: fadeIn 3s ease-in;
-    }
-
-    @keyframes fadeIn {
-      from {opacity: 0;}
-      to {opacity: 0.8;}
-    }
-  </style>
+@keyframes float {
+  from { transform: translateY(100vh); }
+  to { transform: translateY(-10vh); }
+}
+</style>
 </head>
 
 <body>
 
-<div class="container" id="page1">
+<!-- SCREEN 1 -->
+<div class="screen" id="s1">
   <h1>Hai Nabila Bailey 💖</h1>
-
-  <p id="typing"></p>
-
-  <button onclick="nextPage()">Lanjut 👉</button><br>
-  <button onclick="playMusic()">Play Music 🎵</button><br>
-
-  <img src="foto.jpg">
-
-  <div class="footer">
-    <hr style="width:60%; margin:25px auto; border:0.5px solid white;">
-    semoga ini bisa bikin kamu senyum hari ini 😊
-  </div>
+  <button onclick="next(1)">Lanjut 👉</button>
 </div>
 
-<div class="container hidden" id="page2">
-  <h1>😊</h1>
+<!-- SCREEN 2 -->
+<div class="screen hidden" id="s2">
+  <p>Awalnya aku gak tau kenapa setiap aku dekat kamu...</p>
+  <button onclick="next(2)">Lanjut 👉</button>
+</div>
 
+<!-- SCREEN 3 -->
+<div class="screen hidden" id="s3">
+  <p>rasanya beda dari yang lain.</p>
+  <button onclick="next(3)">Lanjut 👉</button>
+</div>
+
+<!-- SCREEN 4 -->
+<div class="screen hidden" id="s4">
+  <p>Pelan-pelan aku sadar...</p>
+  <button onclick="next(4)">Lanjut 👉</button>
+</div>
+
+<!-- SCREEN 5 -->
+<div class="screen hidden" id="s5">
+  <p>perasaan ini bukan cuma sekadar nyaman…</p>
+  <button onclick="next(5)">Lanjut 👉</button>
+</div>
+
+<!-- SCREEN 6 -->
+<div class="screen hidden" id="s6">
+  <p>tapi sesuatu yang lebih dari itu.</p>
+  <button onclick="next(6)">Lanjut 👉</button>
+</div>
+
+<!-- SCREEN 7 -->
+<div class="screen hidden" id="s7">
+  <p>dan kayaknya... aku gak bisa pura-pura lagi 🙂</p>
+  <button onclick="next(7)">Lanjut 👉</button>
+</div>
+
+<!-- SCREEN 8 -->
+<div class="screen hidden" id="s8">
+  <p>Aku suka kamu 💖</p>
+  <img src="foto.jpg">
+  <button onclick="next(8)">Lanjut 👉</button>
+</div>
+
+<!-- SCREEN 9 -->
+<div class="screen hidden" id="s9">
   <p>
-    Aku gak mau buru-buru.<br><br>
     Kalau kamu juga ngerasa hal yang sama,<br><br>
     kita jalanin pelan-pelan aja ya… 💖
   </p>
 
-  <p style="margin-top:20px;">
-    makasih ya udah baca sampai sini 😊
-  </p>
-
-  <div style="margin-top:20px;">
-    <button onclick="jawab('yes')">Aku juga 💖</button>
-    <button onclick="kabur(this)">Hmm… 😅</button>
-  </div>
-
-  <p id="response" style="margin-top:20px;"></p>
+  <button onclick="jawab()">Aku juga 💖</button>
 </div>
 
 <audio id="music" src="awal.mp3"></audio>
 
 <script>
-  const text = `Awalnya aku gak tau kenapa setiap aku dekat kamu...
+function next(n) {
+  document.getElementById("s"+n).classList.add("hidden");
+  document.getElementById("s"+(n+1)).classList.remove("hidden");
+}
 
-rasanya beda dari yang lain.
+function jawab() {
+  alert("jujur aku seneng banget 😊💖");
+}
 
-Pelan-pelan aku sadar,
-perasaan ini bukan cuma sekadar nyaman…
-
-tapi sesuatu yang lebih dari itu.
-
-dan kayaknya...
-aku gak bisa pura-pura lagi 🙂
-
-Aku suka kamu 💖`;
-
-  let i = 0;
-  function typing() {
-    if (i < text.length) {
-      document.getElementById("typing").innerHTML += text.charAt(i);
-      i++;
-      setTimeout(typing, 50);
-    }
-  }
-  typing();
-
-  function nextPage() {
-    document.getElementById("page1").classList.add("hidden");
-    document.getElementById("page2").classList.remove("hidden");
-  }
-
-  function playMusic() {
-    document.getElementById("music").play();
-  }
-
-  function jawab(type) {
-    if (type === 'yes') {
-      document.getElementById("response").innerHTML =
-      "jujur aku seneng banget bacanya 😊💖";
-    }
-  }
-
-  function kabur(btn) {
-    btn.style.position = "absolute";
-    btn.style.top = Math.random() * window.innerHeight + "px";
-    btn.style.left = Math.random() * window.innerWidth + "px";
-  }
-
-  function createHeart() {
-    const heart = document.createElement("div");
-    heart.classList.add("heart");
-    heart.innerHTML = "💗";
-    heart.style.left = Math.random() * 100 + "vw";
-    heart.style.fontSize = (Math.random() * 20 + 10) + "px";
-
-    document.body.appendChild(heart);
-
-    setTimeout(() => {
-      heart.remove();
-    }, 6000);
-  }
-
-  setInterval(createHeart, 400);
+// hearts
+setInterval(()=>{
+  let h=document.createElement("div");
+  h.className="heart";
+  h.innerHTML="💗";
+  h.style.left=Math.random()*100+"vw";
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),6000);
+},400);
 </script>
 
 </body>
