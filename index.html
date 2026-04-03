@@ -15,8 +15,17 @@ body{
   color:white;
   background:black;
   overflow:hidden;
-  padding-top:env(safe-area-inset-top);
-  padding-bottom:env(safe-area-inset-bottom);
+}
+
+/* LAYER BACKGROUND */
+#falling-layer{
+  position:fixed;
+  width:100%;
+  height:100%;
+  top:0;
+  left:0;
+  z-index:1;
+  pointer-events:none;
 }
 
 /* OPENING */
@@ -30,7 +39,6 @@ body{
   flex-direction:column;
   background:black;
   z-index:999;
-  transition:0.5s;
 }
 
 /* MAIN */
@@ -60,17 +68,17 @@ body{
   padding:18px;
   border-radius:16px;
   max-width:85%;
-  margin-bottom:200px;
+  margin-bottom:20px;
+  z-index:3;
 }
 
 .header-name{
   font-size:14px;
   opacity:0.8;
-  margin-bottom:10px;
 }
 
 button{
-  margin-top:12px;
+  margin-top:10px;
   padding:10px 16px;
   border:none;
   border-radius:25px;
@@ -78,37 +86,53 @@ button{
   color:#ff4d6d;
   font-weight:bold;
   cursor:pointer;
+  z-index:3;
+}
+
+/* FOTO SLOT */
+#photo-slot{
+  display:flex;
+  justify-content:center;
+  margin:10px 0;
 }
 
 /* FOTO UTAMA */
-#photo-container{
-  display:flex;
-  justify-content:center;
-}
-
 .main-photo{
   width:190px;
   border-radius:16px;
   opacity:0;
   transform:translateY(20px);
   transition:0.8s ease;
+  animation:floatPhoto 5s ease-in-out infinite;
+}
+
+@keyframes floatPhoto{
+  0%{transform:translateY(0);}
+  50%{transform:translateY(-6px);}
+  100%{transform:translateY(0);}
 }
 
 /* FOTO JATUH */
 .photo-fall{
-  position:fixed;
+  position:absolute;
   top:-100px;
-  z-index:1;
-  pointer-events:none;
   animation:fall linear;
-  filter:blur(1px);
+  opacity:0.4;
 }
 
 @keyframes fall{
   to{transform:translateY(110vh) rotate(360deg);}
 }
 
-/* ENDING MODE */
+/* EMOJI */
+.emoji-fall{
+  position:absolute;
+  top:-30px;
+  animation:fall linear;
+  opacity:0.5;
+}
+
+/* ENDING */
 .focus-mode{
   filter:brightness(0.7);
   transition:1s;
@@ -117,13 +141,13 @@ button{
 /* BOUQUET */
 .bouquet{
   position:fixed;
-  bottom:0;
   left:50%;
+  bottom:-100px;
   transform:translateX(-50%);
-  width:100%;
-  height:45vh;
+  width:110%;
+  height:60vh;
   object-fit:contain;
-  z-index:3;
+  z-index:2;
   animation:fadeUp 1s ease, float 5s ease-in-out infinite;
 }
 
@@ -137,10 +161,28 @@ button{
   50%{transform:translate(-50%,-12px);}
   100%{transform:translate(-50%,0);}
 }
+
+/* MEMORY */
+.memory-main{
+  width:90vw;
+  max-width:380px;
+  border-radius:18px;
+  opacity:0;
+  transition:0.8s ease;
+}
+
+.memory-wrap{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:80vh;
+}
 </style>
 </head>
 
 <body>
+
+<div id="falling-layer"></div>
 
 <div id="startScreen">
   <h2>just... take a moment 🥹</h2>
@@ -149,7 +191,6 @@ button{
 
 <div id="main" class="container" style="display:none;">
   <div id="content"></div>
-  <div id="photo-container"></div>
 </div>
 
 <audio id="lagu1" src="awal.mp3"></audio>
@@ -157,13 +198,9 @@ button{
 
 <script>
 const content=document.getElementById("content");
-const photoContainer=document.getElementById("photo-container");
-const main=document.getElementById("main");
-const startScreen=document.getElementById("startScreen");
-const lagu1=document.getElementById("lagu1");
-const lagu2=document.getElementById("lagu2");
+const layer=document.getElementById("falling-layer");
 
-let step=0, fallInterval, typing=false;
+let step=0, typing=false, fallInterval, emojiInterval;
 
 const lines=[
 "jujur... aku mikir lama buat ini 😅",
@@ -178,56 +215,24 @@ const lines=[
 ];
 
 const memoryPhotos=[
-"kenangan1.jpg","kenangan2.jpg","kenangan3.jpg","kenangan4.jpg",
-"kenangan5.jpg","kenangan6.jpg","kenangan7.jpg","kenangan8.jpg",
-"kenangan9.jpg","kenangan10.jpg","kenangan11.jpg"
+"kenangan1.jpg","kenangan2.jpg","kenangan3.jpg",
+"kenangan4.jpg","kenangan5.jpg","kenangan6.jpg",
+"kenangan7.jpg","kenangan8.jpg","kenangan9.jpg",
+"kenangan10.jpg","kenangan11.jpg"
 ];
 
 function startApp(){
-  startScreen.style.opacity="0";
-  setTimeout(()=>{
-    startScreen.style.display="none";
-    main.style.display="flex";
-    lagu1.play().catch(()=>{});
-    setTimeout(showIntro,1800);
-  },500);
-}
-
-function showIntro(){
-  content.innerHTML=`
-  <div class="text-box">
-  <p>hey... 🥹<br><br>are you ready to know what this really means...? 💖</p>
-  </div>
-  <button onclick="showMade()">I'm ready 💖</button>`;
-}
-
-function showMade(){
-  content.innerHTML=`
-  <div class="text-box">
-  <p>I made this for you... 🥹<br><br>because there are things I’ve been wanting to say... 💖</p>
-  </div>
-  <button onclick="startStory()">Continue 💖</button>`;
+  document.getElementById("startScreen").style.display="none";
+  document.getElementById("main").style.display="flex";
+  document.getElementById("lagu1").play().catch(()=>{});
+  setTimeout(startStory,1500);
 }
 
 function startStory(){
   step=0;
-  showPhoto();
   startFalling();
+  startEmoji();
   next();
-}
-
-function showPhoto(){
-  if(!document.getElementById("mainPhoto")){
-    let img=document.createElement("img");
-    img.src="foto.jpg";
-    img.id="mainPhoto";
-    img.className="main-photo";
-    photoContainer.appendChild(img);
-    setTimeout(()=>{
-      img.style.opacity=1;
-      img.style.transform="translateY(0)";
-    },800);
-  }
 }
 
 function typeText(t){
@@ -235,11 +240,10 @@ function typeText(t){
   let el=document.getElementById("text");
   el.textContent="";
   let i=0;
-
   let inter=setInterval(()=>{
     if(i<t.length){
       el.textContent+=t[i++];
-    } else {
+    }else{
       clearInterval(inter);
       typing=false;
     }
@@ -248,7 +252,6 @@ function typeText(t){
 
 function next(){
   if(typing) return;
-
   step++;
 
   content.innerHTML=`
@@ -256,10 +259,33 @@ function next(){
     <div class="header-name">Hai Nabila Bailey 💕</div>
     <p id="text"></p>
   </div>
+
+  <div id="photo-slot"></div>
+
   <button onclick="next()">Lanjut 👉</button>
   `;
 
   typeText(lines[step-1]);
+
+  let slot=document.getElementById("photo-slot");
+
+  if(step===3){
+    let img=document.createElement("img");
+    img.src="foto.jpg";
+    img.id="mainPhoto";
+    img.className="main-photo";
+    slot.appendChild(img);
+
+    setTimeout(()=>{
+      img.style.opacity=1;
+      img.style.transform="translateY(0)";
+    },900);
+  }
+
+  let photo=document.getElementById("mainPhoto");
+  if(step>3 && photo){
+    slot.appendChild(photo);
+  }
 
   if(step===lines.length) showChoice();
 }
@@ -271,55 +297,62 @@ function startFalling(){
     img.className="photo-fall";
     img.style.left=Math.random()*100+"vw";
     img.style.width=(Math.random()*60+60)+"px";
-    img.style.opacity=(Math.random()*0.3+0.2);
     img.style.animationDuration=(Math.random()*4+6)+"s";
-    document.body.appendChild(img);
+    layer.appendChild(img);
     setTimeout(()=>img.remove(),9000);
   },1800);
 }
 
-function stopFalling(){
+function startEmoji(){
+  emojiInterval=setInterval(()=>{
+    let el=document.createElement("div");
+    el.className="emoji-fall";
+    el.innerHTML=Math.random()>0.5?"💕":"💐";
+    el.style.left=Math.random()*100+"vw";
+    el.style.fontSize=(Math.random()*10+16)+"px";
+    el.style.animationDuration=(Math.random()*3+4)+"s";
+    layer.appendChild(el);
+    setTimeout(()=>el.remove(),7000);
+  },1200);
+}
+
+function stopEffects(){
   clearInterval(fallInterval);
-  document.querySelectorAll(".photo-fall").forEach(img=>{
-    img.style.opacity="0";
-    setTimeout(()=>img.remove(),1000);
-  });
+  clearInterval(emojiInterval);
 }
 
 function showChoice(){
   content.innerHTML=`
   <div class="text-box">
-    <p>jadi... mau gak kamu sama aku? 🥹</p>
+    <p>mau gak kamu sama aku? 🥹</p>
   </div>
   <button onclick="finalYes()">Mau ❤️</button>`;
 }
 
 function finalYes(){
-  stopFalling();
-  main.classList.add("focus-mode");
+  stopEffects();
+  document.getElementById("main").classList.add("focus-mode");
 
-  lagu1.pause();
-  lagu2.play().catch(()=>{});
+  let photo=document.getElementById("mainPhoto");
+  if(photo) photo.remove();
 
-  let mainPhoto=document.getElementById("mainPhoto");
-  if(mainPhoto) mainPhoto.remove();
+  document.getElementById("lagu1").pause();
+  document.getElementById("lagu2").play().catch(()=>{});
 
   setTimeout(()=>{
     content.innerHTML=`
     <div class="text-box">
       <p>
       thank you for choosing me... 🥹💖<br><br>
-      I still can’t believe you said yes...<br><br>
-      I may not be perfect,<br>
-      but I promise I’ll always try my best for you 🤍<br><br>
-      I’ll stay,<br>
-      I’ll learn,<br>
-      and I’ll grow with you 💖<br><br>
-      and in every lifetime...<br>
-      I would still choose you 💕
+      I’ll always try my best for you 🤍<br><br>
+      I love you more than you could ever imagine 💕
       </p>
     </div>
-    <button onclick="showMemory()">Kenangan 💖</button>
+
+    <div style="margin-top:10px;">
+      <button onclick="showMemory()">Kenangan 💖</button>
+    </div>
+
     <img src="bouquet.png" class="bouquet">
     `;
   },1000);
@@ -327,19 +360,28 @@ function finalYes(){
 
 function showMemory(){
   let i=0;
-  content.innerHTML=`<img id="img" class="main-photo">`;
+
+  content.innerHTML=`
+  <div class="memory-wrap">
+    <img id="img" class="memory-main">
+  </div>
+  `;
+
   let img=document.getElementById("img");
 
   function nextImg(){
     if(i<memoryPhotos.length){
       img.style.opacity=0;
+
       setTimeout(()=>{
         img.src=memoryPhotos[i++];
         img.style.opacity=1;
-      },200);
-      setTimeout(nextImg,2000);
+      },300);
+
+      setTimeout(nextImg,3000);
     }
   }
+
   nextImg();
 }
 </script>
