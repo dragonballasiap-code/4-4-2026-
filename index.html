@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Untuk Nabila 💖</title>
+<title>For You 💖</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
@@ -28,10 +28,8 @@ body{
   align-items:center;
   background:black;
   z-index:999;
+  transition:0.5s;
 }
-
-/* MAIN */
-.hidden{display:none;}
 
 .container{
   min-height:100vh;
@@ -58,10 +56,6 @@ body{
   padding:20px;
   border-radius:16px;
   max-width:320px;
-}
-
-#text{
-  text-shadow:0 2px 8px rgba(0,0,0,0.5);
 }
 
 button{
@@ -91,8 +85,8 @@ button{
 .photo-fall{
   position:fixed;
   top:-100px;
-  z-index:0;
-  opacity:0.3;
+  z-index:1;
+  opacity:0.5;
   pointer-events:none;
   animation:fall linear;
 }
@@ -112,7 +106,15 @@ button{
 .memory-main{
   width:320px;
   border-radius:16px;
-  transition:opacity 0.5s ease;
+  transition:opacity 0.5s;
+}
+
+/* BOUQUET */
+.bouquet{
+  width:220px;
+  margin-top:25px;
+  position:relative;
+  z-index:3;
 }
 
 /* GALLERY */
@@ -136,19 +138,15 @@ button{
   <button onclick="startApp()">Tap to Start ✨</button>
 </div>
 
-<div id="main" class="container hidden">
-  <div class="text-box">
-    <h2>Hai Nabila 💖</h2>
-    <p id="text"></p>
-  </div>
-  <button onclick="next()">Lanjut 👉</button>
+<div id="main" class="container" style="display:none;">
 </div>
 
 <audio id="lagu1" src="awal.mp3"></audio>
 <audio id="lagu2" src="ending.mp3"></audio>
 
 <script>
-const text=document.getElementById("text");
+const main=document.getElementById("main");
+const startScreen=document.getElementById("startScreen");
 const lagu1=document.getElementById("lagu1");
 const lagu2=document.getElementById("lagu2");
 
@@ -180,35 +178,92 @@ const memoryPhotos=[
 
 /* START */
 function startApp(){
-  startScreen.style.display="none";
-  main.classList.remove("hidden");
+  startScreen.style.opacity="0";
 
-  lagu1.volume=0.6;
-  lagu1.play().catch(()=>{});
+  setTimeout(()=>{
+    startScreen.style.display="none";
+    main.style.display="flex";
 
-  setTimeout(()=>next(),1000);
+    lagu1.volume=0;
+    lagu1.play().then(()=>{
+      let v=0;
+      let f=setInterval(()=>{
+        if(v<0.6){v+=0.05; lagu1.volume=v;}
+        else clearInterval(f);
+      },120);
+    });
+
+    setTimeout(showIntro,1800);
+
+  },500);
 }
 
-/* TYPE */
+/* INTRO */
+function showIntro(){
+  main.innerHTML=`
+  <div class="text-box">
+    <p>
+    hey... 🥹<br><br>
+    aku bikin ini dengan banyak rasa...<br><br>
+    are you ready to know<br>
+    what this really means...? 💖
+    </p>
+  </div>
+  <button onclick="showMade()">I'm ready 💖</button>
+  `;
+}
+
+/* MADE */
+function showMade(){
+  main.innerHTML=`
+  <div class="text-box">
+    <p>
+    I made this for you... 🥹<br><br>
+    because there are things<br>
+    I’ve been wanting to say... 💖
+    </p>
+  </div>
+  <button onclick="startStory()">Continue 💖</button>
+  `;
+}
+
+/* STORY */
+function startStory(){
+  step=0;
+  next();
+}
+
 function typeText(t){
-  text.textContent="";
+  let el=document.getElementById("text");
+  el.textContent="";
   let i=0;
-  isTyping=true;
   let inter=setInterval(()=>{
     if(i<t.length){
-      text.textContent+=t[i++];
-    }else{
-      clearInterval(inter);
-      isTyping=false;
-    }
+      el.textContent+=t[i++];
+    }else clearInterval(inter);
   },35);
 }
 
-/* NEXT */
 function next(){
-  if(isTyping) return;
   step++;
-  if(step<=lines.length) typeText(lines[step-1]);
+
+  main.innerHTML=`
+  <div class="text-box">
+    <p id="text"></p>
+  </div>
+  <button onclick="next()">Lanjut 👉</button>
+  `;
+
+  typeText(lines[step-1]);
+
+  if(step===3){
+    let img=document.createElement("img");
+    img.src="foto.jpg";
+    img.style.width="230px";
+    img.style.borderRadius="16px";
+    main.appendChild(img);
+  }
+
   if(step===lines.length) showChoice();
 }
 
@@ -223,7 +278,6 @@ function showChoice(){
   `;
 }
 
-/* NO KABUR */
 function moveNo(){
   let b=document.getElementById("noBtn");
   b.style.position="fixed";
@@ -236,37 +290,31 @@ function yes(){
   main.innerHTML=`
   <div class="text-box">
     <p>
-      are you really sure...? 🥹💖<br><br>
-      once you say yes...<br>
-      I’m not letting you go easily 🤍
+    are you really sure...? 🥹💖<br><br>
+    I’m not letting you go easily 🤍
     </p>
   </div>
-  <button onclick="finalYes()">Yes, I'm sure 💖</button>
+  <button onclick="finalYes()">Yes 💖</button>
   `;
 }
 
 /* FINAL */
 function finalYes(){
   lagu1.pause();
-  lagu2.play().catch(()=>{});
+  lagu2.play();
 
   startLoveRain();
 
   main.innerHTML=`
   <div class="text-box">
     <p>
-      thank you for choosing me... 🥹💖<br><br>
-      I may not be perfect,<br>
-      and I can’t always be there in person...<br><br>
-      but I promise,<br>
-      I’ll always try my best for you 🤍<br><br>
-      I’ll stay,<br>
-      I’ll learn,<br>
-      and I’ll grow with you 💖<br><br>
-      I love you more than you could ever imagine 💕
+    thank you for choosing me... 🥹💖<br><br>
+    I’ll always try my best for you 🤍<br><br>
+    I love you more than you could ever imagine 💕
     </p>
   </div>
   <button onclick="showMemory()">Kenangan 💖</button>
+  <img src="bouquet.png" class="bouquet">
   `;
 }
 
@@ -290,23 +338,24 @@ function showMemory(){
   main.innerHTML=`<img id="img" class="memory-main">`;
   let img=document.getElementById("img");
 
-  function next(){
+  function nextImg(){
     if(i<memoryPhotos.length){
       img.style.opacity=0;
       setTimeout(()=>{
         img.src=memoryPhotos[i++];
         img.style.opacity=1;
       },200);
-      setTimeout(next,2000);
+      setTimeout(nextImg,2000);
     } else showGallery();
   }
-  next();
+  nextImg();
 }
 
 /* GRID */
 function showGallery(){
   main.innerHTML=`<h2>Kenangan Kita 💖</h2><div class="gallery"></div>`;
   let g=document.querySelector(".gallery");
+
   memoryPhotos.forEach(s=>{
     let im=document.createElement("img");
     im.src=s;
@@ -314,7 +363,7 @@ function showGallery(){
   });
 }
 
-/* BACKGROUND FOTO */
+/* FOTO BACKGROUND */
 setInterval(()=>{
   let img=document.createElement("img");
   img.src="foto"+(Math.floor(Math.random()*6)+1)+".jpg";
