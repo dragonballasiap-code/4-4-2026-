@@ -8,22 +8,21 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
 <style>
-html, body{
+html,body{
   margin:0;
   padding:0;
   height:100%;
-  font-family:'Poppins', sans-serif;
+  font-family:'Poppins',sans-serif;
   overflow:hidden;
   text-align:center;
   color:white;
 }
 
 body{
-  background: linear-gradient(-45deg,#ff4d6d,#c9184a,#a4133c,#800f2f);
+  background:linear-gradient(-45deg,#ff4d6d,#c9184a,#a4133c,#800f2f);
   background-size:400% 400%;
   animation:bg 15s ease infinite;
 }
-
 @keyframes bg{
   0%{background-position:0% 50%}
   50%{background-position:100% 50%}
@@ -45,31 +44,32 @@ body::after{
   justify-content:center;
   align-items:center;
   padding:20px;
-  position:relative;
   z-index:2;
+  position:relative;
 }
 
 .text-box{
   background:rgba(0,0,0,0.55);
   padding:22px;
   border-radius:18px;
-  backdrop-filter: blur(6px);
+  backdrop-filter:blur(6px);
   max-width:320px;
 }
 
 h1{font-size:30px;font-weight:700;}
 p{font-size:20px;line-height:1.9;font-weight:300;}
 
+#text{transition:opacity 0.3s ease;}
+
 button{
   margin-top:20px;
-  padding:12px 25px;
+  padding:12px;
   border:none;
   border-radius:25px;
   background:white;
   color:#ff4d6d;
   font-weight:bold;
   width:80%;
-  max-width:280px;
 }
 
 /* FOTO */
@@ -80,38 +80,41 @@ button{
   animation:fadeIn 1s ease;
 }
 
+.memory-container{
+  display:flex;
+  gap:12px;
+  margin-top:15px;
+  overflow:hidden;
+  max-width:320px;
+}
+
 .memory-img{
-  width:170px;
+  width:140px;
   border-radius:12px;
-  margin-top:10px;
-  opacity:0.9;
-  animation:fadeIn 0.6s ease;
+  animation:slideIn 0.5s ease;
+  transition:transform 0.3s;
+}
+.memory-img:hover{transform:scale(1.05);}
+
+@keyframes slideIn{
+  from{transform:translateX(60px);opacity:0}
+  to{transform:translateX(0);opacity:1}
 }
 
 @keyframes fadeIn{
-  from{opacity:0; transform:translateY(20px)}
-  to{opacity:1; transform:translateY(0)}
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
 }
 
 /* FOTO JATUH */
 .photo-fall{
   position:fixed;
   top:-100px;
-  opacity:0.75;
-  animation:fallPhoto linear forwards;
-}
-@keyframes fallPhoto{
-  to{transform:translateY(110vh) rotate(360deg);}
-}
-
-/* LOVE */
-.fall{
-  position:fixed;
-  top:-10px;
-  animation:fall linear forwards;
+  opacity:0.7;
+  animation:fall 5s linear;
 }
 @keyframes fall{
-  to{transform:translateY(100vh) rotate(360deg);}
+  to{transform:translateY(110vh) rotate(360deg);}
 }
 </style>
 </head>
@@ -123,6 +126,9 @@ button{
     <h1>Hai Nabila Bailey 💖</h1>
     <p id="text"></p>
   </div>
+
+  <div id="memoryContainer" class="memory-container"></div>
+
   <button id="btn" onclick="next()">Mulai 👉</button>
 </div>
 
@@ -130,30 +136,26 @@ button{
 <audio id="lagu2" src="ending.mp3"></audio>
 
 <script>
-const text = document.getElementById("text");
-const btn = document.getElementById("btn");
-const lagu1 = document.getElementById("lagu1");
-const lagu2 = document.getElementById("lagu2");
+const text=document.getElementById("text");
+const btn=document.getElementById("btn");
+const lagu1=document.getElementById("lagu1");
+const lagu2=document.getElementById("lagu2");
 
 let step=0;
 let isTyping=false;
 
-/* 💖 TEKS */
+/* TEKS */
 const lines=[
 "jujur... aku sempet mikir lama sebelum bikin ini 😅",
 "soalnya ini bukan hal kecil buat aku...",
 "jujur... aku juga sempet takut kalau ini malah bikin semuanya berubah 😅",
-"tapi setiap kita ngobrol, selalu ada sesuatu yang bikin aku nyaman 🥹",
+"tapi setiap kita ngobrol selalu ada sesuatu yang bikin aku nyaman 🥹",
 "hal kecil, tapi cukup buat bikin aku senyum sendiri",
-"anehnya... kamu sering tiba-tiba kepikiran",
 "dan dari situ aku mulai sadar...",
 "perasaan ini bukan sekadar biasa",
 "",
-"dan dari semua momen kecil itu...",
-"aku sadar ada banyak hal yang gak bisa aku lupain 🥹",
-"semua kenangan itu pelan-pelan jadi sesuatu yang berarti",
-"dan entah kenapa... semuanya selalu tentang kamu 💖",
-"mungkin dari situ semuanya mulai terasa beda",
+"dan dari semua momen itu...",
+"aku gak pernah nyangka semuanya bisa jadi seberarti ini 🥹",
 "",
 "aku mulai jatuh hati sama kamu 💖",
 "...dan mungkin ini pertama kalinya aku seberani ini untuk seseorang 🥹",
@@ -162,53 +164,50 @@ const lines=[
 "kamu mau gak kita jalanin ini pelan-pelan? 🥹"
 ];
 
-/* TYPE */
-function typeText(teks){
-  clearInterval(window.typingInterval);
-  text.innerHTML="";
-  let i=0;
-  isTyping=true;
-
-  window.typingInterval=setInterval(()=>{
-    if(i<teks.length){
-      text.innerHTML+=teks[i];
-      i++;
-    } else {
-      clearInterval(window.typingInterval);
-      setTimeout(()=>{isTyping=false},300);
-    }
-  },35);
-}
-
-/* MEMORY 11 FOTO */
+/* FOTO */
+const fallingPhotos=["foto1.jpg","foto2.jpg","foto3.jpg","foto4.jpg","foto5.jpg","foto6.jpg"];
 const memoryPhotos=[
 "kenangan1.jpg","kenangan2.jpg","kenangan3.jpg","kenangan4.jpg","kenangan5.jpg",
 "kenangan6.jpg","kenangan7.jpg","kenangan8.jpg","kenangan9.jpg","kenangan10.jpg","kenangan11.jpg"
 ];
+
+function typeText(teks){
+  text.style.opacity=0;
+  setTimeout(()=>{text.style.opacity=1},100);
+
+  text.innerHTML="";
+  let i=0;
+  isTyping=true;
+
+  let interval=setInterval(()=>{
+    if(i<teks.length){
+      text.innerHTML+=teks[i++];
+    }else{
+      clearInterval(interval);
+      setTimeout(()=>isTyping=false,300);
+    }
+  },35);
+}
 
 function showMemory(index){
   let img=document.createElement("img");
   img.src=memoryPhotos[index];
   img.className="memory-img";
 
-  document.getElementById("main").appendChild(img);
+  let c=document.getElementById("memoryContainer");
+  c.appendChild(img);
 
-  // maksimal tampil 3 (biar clean)
-  let all=document.querySelectorAll(".memory-img");
+  let all=c.querySelectorAll(".memory-img");
   if(all.length>3){
-    all[0].remove();
+    all[0].style.opacity=0;
+    setTimeout(()=>all[0].remove(),300);
   }
 }
 
-/* DELAY */
-let waitTimes=new Array(25).fill(1500);
-
-/* NEXT */
 function next(){
   if(isTyping) return;
 
   step++;
-  isTyping=true;
 
   if(step===1){
     lagu1.currentTime=25;
@@ -227,8 +226,7 @@ function next(){
     document.getElementById("main").appendChild(img);
   }
 
-  // memory muncul bertahap
-  let memoryStart=9;
+  let memoryStart=8;
   if(step>=memoryStart && step<memoryStart+memoryPhotos.length){
     showMemory(step-memoryStart);
   }
@@ -238,50 +236,27 @@ function next(){
 
     let yes=document.createElement("button");
     yes.innerHTML="Mau ❤️";
-    yes.onclick=yesClick;
+    yes.onclick=()=>location.reload();
 
     document.getElementById("main").appendChild(yes);
   }
 
-  setTimeout(()=>{isTyping=false},waitTimes[step]||1500);
+  let delay=(step>=memoryStart)?2200:1500;
+  if(step===lines.length-1) delay=2500;
+
+  setTimeout(()=>isTyping=false,delay);
 }
 
 /* FOTO JATUH */
 setInterval(()=>{
   let img=document.createElement("img");
-  img.src=memoryPhotos[Math.floor(Math.random()*memoryPhotos.length)];
+  img.src=fallingPhotos[Math.floor(Math.random()*fallingPhotos.length)];
   img.className="photo-fall";
   img.style.left=Math.random()*100+"vw";
   img.style.width="50px";
-  img.style.animationDuration="5s";
   document.body.appendChild(img);
   setTimeout(()=>img.remove(),6000);
 },1500);
-
-/* YES */
-function yesClick(){
-
-  document.body.innerHTML=`
-  <div class="container">
-    <div class="text-box">
-      <h1>Nabila Bailey 💖</h1>
-      <p>
-        thank you for saying yes... 🥹❤️<br><br>
-
-        I’m sorry I couldn’t say this directly,<br>
-        but I truly mean everything 🤍<br><br>
-
-        I’ll always try my best for you 💖<br><br>
-
-        let’s take this slowly… together ✨<br><br>
-
-        and I’m really glad… it’s you 💖
-      </p>
-    </div>
-    <img src="bouquet.png">
-  </div>
-  `;
-}
 </script>
 
 </body>
