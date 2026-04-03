@@ -5,21 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Untuk Nabila 💖</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
 <style>
 html, body{
   margin:0;
   padding:0;
   height:100%;
-  font-family:'Segoe UI', sans-serif;
+  font-family:'Poppins', sans-serif;
   overflow:hidden;
   text-align:center;
   color:white;
 }
 
+/* BACKGROUND DEEP ROMANTIC */
 body{
-  background: linear-gradient(-45deg,#ff758c,#ff7eb3,#ff4d6d,#ff8fa3);
+  background: linear-gradient(-45deg, #ff4d6d, #c9184a, #a4133c, #800f2f);
   background-size:400% 400%;
-  animation:bg 10s ease infinite;
+  animation:bg 15s ease infinite;
 }
 
 @keyframes bg{
@@ -28,16 +31,27 @@ body{
   100%{background-position:0% 50%}
 }
 
+/* overlay */
 body::after{
   content:"";
   position:fixed;
   width:100%;
   height:100%;
-  background:rgba(0,0,0,0.3);
+  background:rgba(0,0,0,0.45);
   top:0;
   left:0;
 }
 
+/* glow tengah */
+body::before{
+  content:"";
+  position:fixed;
+  width:100%;
+  height:100%;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.08), transparent 60%);
+}
+
+/* container */
 .container{
   min-height:100vh;
   display:flex;
@@ -45,27 +59,33 @@ body::after{
   justify-content:center;
   align-items:center;
   padding:20px;
-  position:relative;
   z-index:2;
+  position:relative;
 }
 
+/* text box */
 .text-box{
   background:rgba(0,0,0,0.55);
   padding:22px;
   border-radius:18px;
   backdrop-filter: blur(6px);
   max-width:320px;
+  box-shadow:0 0 30px rgba(255,255,255,0.1);
 }
 
 h1{
   font-size:30px;
+  font-weight:700;
 }
 
 p{
   font-size:20px;
   line-height:1.9;
+  font-weight:300;
+  letter-spacing:0.3px;
 }
 
+/* button */
 button{
   margin-top:20px;
   padding:12px 25px;
@@ -78,23 +98,35 @@ button{
   max-width:280px;
 }
 
+/* foto tengah */
+.center-img{
+  width:240px;
+  border-radius:18px;
+  margin-top:20px;
+  box-shadow:0 10px 40px rgba(0,0,0,0.5);
+  animation:fadeIn 1s ease;
+}
+
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(-30px)}
+  to{opacity:1; transform:translateY(0)}
+}
+
 /* foto jatuh */
 .photo-fall{
   position:fixed;
   top:-100px;
   border-radius:12px;
-  opacity:0.85;
+  opacity:0.75;
+  filter: blur(0.3px);
   animation: fallPhoto linear forwards;
-  z-index:1;
 }
 
 @keyframes fallPhoto{
-  to{
-    transform: translateY(110vh) rotate(360deg);
-  }
+  to{ transform: translateY(110vh) rotate(360deg); }
 }
 
-/* love & bunga */
+/* love */
 .fall{
   position:fixed;
   top:-10px;
@@ -102,16 +134,7 @@ button{
 }
 
 @keyframes fall{
-  to{
-    transform: translateY(100vh) rotate(360deg);
-  }
-}
-
-img{
-  width:220px;
-  border-radius:15px;
-  margin-top:20px;
-  box-shadow:0 0 25px rgba(255,255,255,0.6);
+  to{ transform: translateY(100vh) rotate(360deg); }
 }
 </style>
 </head>
@@ -119,14 +142,11 @@ img{
 <body>
 
 <div class="container" id="main">
-
   <div class="text-box">
     <h1>Hai Nabila Bailey 💖</h1>
     <p id="text"></p>
   </div>
-
   <button id="btn" onclick="next()">Mulai 👉</button>
-
 </div>
 
 <audio id="lagu1" src="awal.mp3"></audio>
@@ -140,17 +160,17 @@ const lagu2 = document.getElementById("lagu2");
 
 let step = 0;
 
-/* 💖 TEKS UTAMA */
 const lines = [
 "jujur... aku sempet mikir lama sebelum bikin ini 😅",
 "soalnya ini bukan hal kecil buat aku...",
+"jujur... aku juga sempet takut kalau ini malah bikin semuanya berubah 😅",
 "dan mungkin kata-kata ini gak akan sesempurna yang aku rasain",
 "tapi setiap kita ngobrol, selalu ada sesuatu yang bikin aku nyaman 🥹",
 "hal kecil, tapi cukup buat bikin aku senyum sendiri",
 "anehnya... kamu sering tiba-tiba kepikiran tanpa alasan",
 "dan dari situ aku mulai sadar...",
-"kalau perasaan ini bukan sekadar biasa",
-"aku mulai jatuh hati sama kamu 💖",
+"dan entah sejak kapan... perasaan itu berubah jadi sesuatu yang lebih dalam 💖",
+"...dan mungkin ini pertama kalinya aku seberani ini untuk seseorang 🥹",
 "",
 "aku gak mau maksa, dan gak mau bikin kamu gak nyaman",
 "aku cuma pengen jujur sama apa yang aku rasain",
@@ -159,20 +179,16 @@ const lines = [
 "kamu mau gak kita jalanin ini pelan-pelan? 🥹"
 ];
 
-/* FIX TYPE TEXT */
 function typeText(teks){
   clearInterval(window.typingInterval);
-  text.innerHTML = "";
-  let i = 0;
-
-  window.typingInterval = setInterval(()=>{
-    if(i < teks.length){
-      text.innerHTML += teks[i];
+  text.innerHTML="";
+  let i=0;
+  window.typingInterval=setInterval(()=>{
+    if(i<teks.length){
+      text.innerHTML+=teks[i];
       i++;
-    } else {
-      clearInterval(window.typingInterval);
-    }
-  }, 35);
+    } else clearInterval(window.typingInterval);
+  },35);
 }
 
 function next(){
@@ -186,12 +202,13 @@ function next(){
   }
 
   if(step<=lines.length){
-    typeText(lines[step-1]);
+    setTimeout(()=>{ typeText(lines[step-1]); },200);
   }
 
-  if(step===4){
+  if(step===5){
     let img=document.createElement("img");
     img.src="foto.jpg";
+    img.className="center-img";
     document.getElementById("main").appendChild(img);
   }
 
@@ -219,50 +236,32 @@ function kabur(btn){
 
 /* FOTO RAIN */
 let photoInterval;
-
-const photos = [
-  "./foto1.jpg",
-  "./foto2.jpg",
-  "./foto3.jpg",
-  "./foto4.jpg",
-  "./foto5.jpg",
-  "./foto6.jpg"
-];
+const photos=["./foto1.jpg","./foto2.jpg","./foto3.jpg","./foto4.jpg","./foto5.jpg","./foto6.jpg"];
 
 function photoRain(){
-  photoInterval = setInterval(()=>{
-    let img = document.createElement("img");
-
-    let randomPhoto = photos[Math.floor(Math.random()*photos.length)];
-
-    img.src = randomPhoto;
+  photoInterval=setInterval(()=>{
+    let img=document.createElement("img");
+    img.src=photos[Math.floor(Math.random()*photos.length)];
     img.className="photo-fall";
-
     img.style.left=Math.random()*100+"vw";
     img.style.animationDuration=(Math.random()*4+4)+"s";
-    img.style.width=(Math.random()*40+60)+"px";
-
+    img.style.width=(Math.random()*30+50)+"px";
     document.body.appendChild(img);
     setTimeout(()=>img.remove(),8000);
-
-  },1000);
+  },1200);
 }
 
 /* LOVE RAIN */
 function loveRain(){
   setInterval(()=>{
     let el=document.createElement("div");
-
     el.className="fall";
     el.innerHTML=Math.random()>0.5?"💖":"🌸";
-
     el.style.left=Math.random()*100+"vw";
     el.style.fontSize=(Math.random()*20+15)+"px";
-    el.style.animationDuration=(Math.random()*4+3)+"s";
-
+    el.style.animationDuration=(Math.random()*3+2)+"s";
     document.body.appendChild(el);
     setTimeout(()=>el.remove(),7000);
-
   },300);
 }
 
@@ -271,13 +270,12 @@ function yes(){
 
   clearInterval(photoInterval);
   document.querySelectorAll(".photo-fall").forEach(el=>el.remove());
-
   loveRain();
 
   let fade=setInterval(()=>{
     if(lagu1.volume>0.05){
       lagu1.volume-=0.05;
-    }else{
+    } else {
       clearInterval(fade);
       lagu1.pause();
 
@@ -288,39 +286,41 @@ function yes(){
       let fadeIn=setInterval(()=>{
         if(lagu2.volume<0.6){
           lagu2.volume+=0.05;
-        }else clearInterval(fadeIn);
-      },200);
+        } else clearInterval(fadeIn);
+      },150);
     }
-  },200);
+  },150);
 
-  document.body.innerHTML=`
-  <div class="container">
-    <div class="text-box">
-      <h1>Nabila Bailey 💖</h1>
-      <p>
-        makasih ya... udah bilang iya 🥹❤️<br><br>
+  setTimeout(()=>{
+    document.body.innerHTML=`
+    <div class="container">
+      <div class="text-box">
+        <h1>Nabila Bailey 💖</h1>
+        <p>
+          thank you for saying yes... 🥹❤️<br><br>
 
-        jujur, aku gak nyangka bakal sampai di momen ini...<br>
-        momen yang dari awal cuma ada di pikiran aku aja<br><br>
+          honestly, I still can’t believe we’re here right now,<br>
+          a moment I used to only imagine in my head 💭<br><br>
 
-        mungkin semua ini sederhana,<br>
-        tapi buat aku... ini berarti banget 💖<br><br>
+          I’m sorry I couldn’t say all of this to you directly...<br>
+          but please know that I truly mean every single word 🤍<br><br>
 
-        aku gak janji semuanya bakal selalu sempurna,<br>
-        tapi aku janji akan selalu berusaha buat jaga kamu,<br>
-        dan jaga apa yang kita mulai hari ini 🤍<br><br>
+          I might not be perfect,<br>
+          but I’ll always try my best for you,<br>
+          and for whatever we’re starting today 💖<br><br>
 
-        pelan-pelan aja ya... kita jalanin bareng ✨
-      </p>
+          let’s take this slowly… together ✨<br><br>
+
+          and I’m really glad… it’s you 💖
+        </p>
+      </div>
+      <img src="bouquet.png">
     </div>
-    <img src="bouquet.png">
-  </div>
-  `;
+    `;
+  },600);
 }
 
-/* START */
 photoRain();
-
 </script>
 
 </body>
