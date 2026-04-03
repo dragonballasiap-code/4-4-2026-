@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Untuk Nabila 💖</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
 
 <style>
 body{
@@ -39,6 +39,17 @@ body{
   max-width:320px;
 }
 
+#text{
+  transition:opacity 0.3s ease;
+  text-shadow:0 2px 8px rgba(0,0,0,0.5);
+}
+
+p{
+  font-size:20px;
+  line-height:1.8;
+  font-weight:400;
+}
+
 button{
   margin-top:20px;
   padding:12px;
@@ -47,6 +58,10 @@ button{
   background:white;
   color:#ff4d6d;
   font-weight:bold;
+  transition:0.3s;
+}
+button:hover{
+  transform:scale(1.05);
 }
 
 /* FOTO JATUH */
@@ -54,12 +69,31 @@ button{
   position:fixed;
   top:-100px;
   animation:fall linear;
+  opacity:0.8;
 }
 @keyframes fall{
   to{transform:translateY(110vh) rotate(360deg);}
 }
 
-/* GALERI */
+/* BOUQUET */
+.bouquet{
+  width:220px;
+  margin-top:25px;
+  animation:bouquetIn 1s ease;
+}
+@keyframes bouquetIn{
+  from{opacity:0;transform:scale(0.8);}
+  to{opacity:1;transform:scale(1);}
+}
+
+/* MEMORY */
+.memory-main{
+  width:240px;
+  border-radius:16px;
+  transition:opacity 0.5s ease;
+}
+
+/* GALLERY */
 .gallery{
   display:flex;
   flex-wrap:wrap;
@@ -137,19 +171,25 @@ const lines=[
 "mau gak kamu jalanin ini sama aku? 🥹"
 ];
 
+/* TYPE FIX FINAL */
 function typeText(teks){
   if(teks.trim()===""){
     text.innerHTML="<br>";
+    isTyping=false;
     return;
   }
 
-  text.innerHTML="";
+  text.style.opacity=0;
+  setTimeout(()=> text.style.opacity=1,100);
+
+  text.textContent="";
+
   let i=0;
   isTyping=true;
 
   let interval=setInterval(()=>{
     if(i<teks.length){
-      text.innerHTML+=teks[i++];
+      text.textContent+=teks[i++];
     }else{
       clearInterval(interval);
       isTyping=false;
@@ -164,7 +204,16 @@ function next(){
 
   if(step===1){
     lagu1.currentTime=25;
-    lagu1.play().catch(()=>{});
+    lagu1.volume=0;
+    lagu1.play().then(()=>{
+      let vol=0;
+      let fade=setInterval(()=>{
+        if(vol<0.6){
+          vol+=0.05;
+          lagu1.volume=vol;
+        } else clearInterval(fade);
+      },100);
+    }).catch(()=>{});
   }
 
   if(step<=lines.length){
@@ -179,17 +228,26 @@ function next(){
 /* ENDING */
 function showEnding(){
   lagu1.pause();
-  setTimeout(()=>{ lagu2.play().catch(()=>{}); },500);
+
+  setTimeout(()=>{
+    lagu2.volume=0.6;
+    lagu2.play().catch(()=>{});
+  },500);
 
   document.getElementById("main").innerHTML=`
   <div class="text-box">
     <h1>💖</h1>
     <p>
       thank you for reading this... 🥹<br><br>
-      I really mean every single word 💖
+      I really mean every single word 💖<br><br>
+      I’ll always try my best for you 🤍<br><br>
+      and I’m really glad… it’s you 💖
     </p>
   </div>
+
   <button onclick="showMemorySequence()">Lihat Kenangan 💖</button>
+
+  <img src="bouquet.png" class="bouquet">
   `;
 }
 
@@ -199,8 +257,8 @@ function showMemorySequence(){
 
   document.getElementById("main").innerHTML=`
   <div class="container">
-    <img id="memoryImg" style="width:220px;border-radius:16px;">
-    <p style="margin-top:15px;">Kenangan kita... 💖</p>
+    <img id="memoryImg" class="memory-main">
+    <p>Kenangan kita... 💖</p>
   </div>
   `;
 
@@ -208,18 +266,22 @@ function showMemorySequence(){
 
   function nextImage(){
     if(index < memoryPhotos.length){
-      img.src = memoryPhotos[index];
+      img.style.opacity=0;
+      setTimeout(()=>{
+        img.src=memoryPhotos[index];
+        img.style.opacity=1;
+      },200);
+
       index++;
-      setTimeout(nextImage,1500);
+      setTimeout(nextImage,1800);
     } else {
-      showAllButton();
+      setTimeout(showAllButton,2000);
     }
   }
 
   nextImage();
 }
 
-/* BUTTON GRID */
 function showAllButton(){
   let btn=document.createElement("button");
   btn.innerHTML="Lihat Semua Kenangan 💖";
@@ -250,15 +312,11 @@ setInterval(()=>{
   img.src=fallingPhotos[Math.floor(Math.random()*fallingPhotos.length)];
   img.className="photo-fall";
   img.style.left=Math.random()*100+"vw";
-  img.style.width="80px";
-  img.style.animationDuration="5s";
+  img.style.width=(Math.random()*20+60)+"px";
+  img.style.animationDuration=(Math.random()*3+4)+"s";
   document.body.appendChild(img);
   setTimeout(()=>img.remove(),6000);
 },2000);
-
-/* AUTO START */
-typeText(lines[0]);
-step=1;
 </script>
 
 </body>
