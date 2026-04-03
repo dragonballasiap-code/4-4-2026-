@@ -8,144 +8,160 @@
 <style>
 body {
   margin:0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(#ffdde1, #ee9ca7);
-  color:white;
+  font-family: Arial;
   text-align:center;
+  color:white;
   overflow:hidden;
+
+  background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #ffdde1);
+  background-size: 400% 400%;
+  animation: gradient 10s ease infinite;
 }
 
-.screen {
+@keyframes gradient {
+  0% {background-position:0% 50%;}
+  50% {background-position:100% 50%;}
+  100% {background-position:0% 50%;}
+}
+
+.container {
   height:100vh;
   display:flex;
   flex-direction:column;
   justify-content:center;
+  align-items:center;
   padding:20px;
+  animation: fade 1s ease;
+}
+
+@keyframes fade {
+  from {opacity:0; transform: translateY(20px);}
+  to {opacity:1; transform: translateY(0);}
 }
 
 h1 { font-size:28px; }
 
 p {
   font-size:20px;
+  max-width:350px;
   line-height:1.8;
-  max-width:420px;
-  margin:auto;
 }
 
 button {
   margin-top:25px;
   padding:12px 25px;
-  border-radius:20px;
   border:none;
+  border-radius:25px;
   background:white;
-  color:#f06292;
+  color:#ff4d6d;
   font-weight:bold;
   cursor:pointer;
 }
 
-.hidden { display:none; }
-
 img {
-  width:240px;
+  width:220px;
   border-radius:15px;
   margin-top:20px;
-  box-shadow:0 0 20px rgba(255,255,255,0.5);
+  box-shadow:0 0 20px rgba(255,255,255,0.6);
+}
+
+.heart {
+  position:fixed;
+  color:pink;
+  animation: float 5s linear infinite;
+}
+
+@keyframes float {
+  from {transform:translateY(100vh);}
+  to {transform:translateY(-10vh);}
 }
 </style>
 </head>
 
 <body>
 
-<!-- SCREEN 1 -->
-<div class="screen" id="s1">
-  <h1>Hai Nabila Bailey 💖</h1>
-  <button onclick="next(1)">Mulai 👉</button>
+<div class="container" id="main">
+  <h1 id="title">Hai Nabila Bailey 💖</h1>
+  <p id="text"></p>
+
+  <button onclick="next()">Mulai 👉</button>
 </div>
 
-<!-- SCREEN 2 -->
-<div class="screen hidden" id="s2">
-  <p>jujur... aku agak bingung mulai dari mana 😅</p>
-  <button onclick="next(2)">Lanjut 👉</button>
-</div>
-
-<!-- SCREEN 3 -->
-<div class="screen hidden" id="s3">
-  <p>soalnya ada sesuatu yang gak bisa aku anggap biasa lagi...</p>
-  <button onclick="next(3)">Lanjut 👉</button>
-</div>
-
-<!-- SCREEN 4 -->
-<div class="screen hidden" id="s4">
-  <p>anehnya... kamu sering muncul di pikiran aku 🥹</p>
-  <button onclick="next(4)">Lanjut 👉</button>
-</div>
-
-<!-- SCREEN 5 -->
-<div class="screen hidden" id="s5">
-  <p>dan tiap kita ngobrol, selalu ada hal kecil yang bikin aku senyum</p>
-  <img src="foto.jpg">
-  <button onclick="next(5)">Lanjut 👉</button>
-</div>
-
-<!-- SCREEN 6 -->
-<div class="screen hidden" id="s6">
-  <p>jujur aja... aku gak tau ini bakal jadi apa</p>
-  <button onclick="next(6)">Lanjut 👉</button>
-</div>
-
-<!-- SCREEN 7 -->
-<div class="screen hidden" id="s7">
-  <p>tapi aku juga gak mau kehilangan kesempatan buat jujur</p>
-  <button onclick="next(7)">Lanjut 👉</button>
-</div>
-
-<!-- SCREEN 8 -->
-<div class="screen hidden" id="s8">
-  <p>dan tanpa aku sadar... aku mulai jatuh hati sama kamu 💖</p>
-  <button onclick="next(8)">Lanjut 👉</button>
-</div>
-
-<!-- SCREEN 9 -->
-<div class="screen hidden" id="s9">
-  <p>kalau kamu ngerasa hal yang sama...</p>
-  <button onclick="next(9)">Lanjut 👉</button>
-</div>
-
-<!-- SCREEN 10 -->
-<div class="screen hidden" id="s10">
-  <p>kamu mau gak kita coba jalanin ini pelan-pelan? 🥹</p>
-  <button onclick="yes()">Mau ❤️</button>
-  <button onclick="kabur(this)">Gak 😈</button>
-</div>
-
-<!-- AUDIO -->
 <audio id="lagu1" src="awal.mp3"></audio>
 <audio id="lagu2" src="ending.mp3"></audio>
 
 <script>
+const text = document.getElementById("text");
 const lagu1 = document.getElementById("lagu1");
 const lagu2 = document.getElementById("lagu2");
 
-function next(n){
-  document.getElementById("s"+n).classList.add("hidden");
-  document.getElementById("s"+(n+1)).classList.remove("hidden");
+let step = 0;
 
-  // mulai lagu pertama
-  if(n === 1){
+function next(){
+  step++;
+
+  if(step === 1){
     lagu1.volume = 0.5;
     lagu1.play().catch(()=>{});
+    text.innerHTML = "jujur... aku agak bingung mulai dari mana 😅";
+  }
+
+  else if(step === 2){
+    text.innerHTML = "soalnya ada sesuatu yang gak bisa aku anggap biasa lagi...";
+  }
+
+  else if(step === 3){
+    text.innerHTML = "anehnya... kamu sering muncul di pikiran aku 🥹";
+  }
+
+  else if(step === 4){
+    text.innerHTML = "dan tiap kita ngobrol, selalu ada hal kecil yang bikin aku senyum";
+    let img = document.createElement("img");
+    img.src = "foto.jpg";
+    document.getElementById("main").appendChild(img);
+  }
+
+  else if(step === 5){
+    text.innerHTML = "jujur aja... aku gak tau ini bakal jadi apa";
+  }
+
+  else if(step === 6){
+    text.innerHTML = "tapi aku juga gak mau kehilangan kesempatan buat jujur";
+  }
+
+  else if(step === 7){
+    text.innerHTML = "dan tanpa aku sadar... aku mulai jatuh hati sama kamu 💖";
+  }
+
+  else if(step === 8){
+    text.innerHTML = "kalau kamu ngerasa hal yang sama...";
+  }
+
+  else if(step === 9){
+    text.innerHTML = "kamu mau gak kita coba jalanin ini pelan-pelan? 🥹";
+
+    let yesBtn = document.createElement("button");
+    yesBtn.innerHTML = "Mau ❤️";
+    yesBtn.onclick = yes;
+
+    let noBtn = document.createElement("button");
+    noBtn.innerHTML = "Gak 😈";
+    noBtn.onmouseover = () => kabur(noBtn);
+
+    document.getElementById("main").appendChild(yesBtn);
+    document.getElementById("main").appendChild(noBtn);
   }
 }
 
 function kabur(btn){
   btn.style.position = "absolute";
-  btn.style.top = Math.random()*70 + "%";
-  btn.style.left = Math.random()*70 + "%";
+  btn.style.top = Math.random()*80 + "%";
+  btn.style.left = Math.random()*80 + "%";
 }
 
 function yes(){
 
-  // fade lagu pertama
+  // fade lagu1
   let fade = setInterval(()=>{
     if(lagu1.volume > 0.05){
       lagu1.volume -= 0.05;
@@ -165,20 +181,31 @@ function yes(){
   },200);
 
   document.body.innerHTML = `
-    <div class="screen">
-      <h1>Nabila Bailey 💖</h1>
-
-      <p>makasih udah bilang iya... 🥹❤️</p>
-
-      <img src="bouquet.png">
-
-      <p>
-        mungkin ini sederhana...<br>
-        tapi buat aku, ini berarti banyak 💖<br><br>
-        dan aku pengen jalanin ini sama kamu ✨
-      </p>
-    </div>
+  <div class="container">
+    <h1>Nabila Bailey 💖</h1>
+    <p>makasih udah bilang iya... 🥹❤️</p>
+    <img src="bouquet.png">
+    <p>
+      mungkin ini sederhana...<br>
+      tapi buat aku, ini berarti banyak 💖<br><br>
+      dan aku pengen jalanin ini sama kamu ✨
+    </p>
+  </div>
   `;
+
+  fireworks();
+}
+
+// efek hati
+function fireworks(){
+  setInterval(()=>{
+    let h = document.createElement("div");
+    h.className = "heart";
+    h.innerHTML = "💖";
+    h.style.left = Math.random()*100+"vw";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),5000);
+  },300);
 }
 </script>
 
