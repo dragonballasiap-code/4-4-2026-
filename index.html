@@ -47,7 +47,8 @@ padding:20px;
 .text-box{
 background:rgba(0,0,0,0.55);
 backdrop-filter:blur(6px);
-padding:20px;border-radius:18px;width:90%;
+padding:20px 20px 80px 20px; /* ruang bouquet */
+border-radius:18px;width:90%;
 line-height:1.7;
 box-shadow:0 10px 40px rgba(0,0,0,0.5);
 animation:fadeText 0.6s ease;
@@ -84,14 +85,19 @@ transition:1s ease;
 /* BOUQUET */
 .bouquet{
 position:fixed;
-right:10px;
-bottom:0;
-width:30%;
-max-width:180px;
-opacity:0.85;
-transform:translateY(60px) scale(0.9);
+right:12px;
+bottom:20px;
+
+width:32%;
+max-width:200px;
+
+opacity:0.95;
+
+transform:translateY(40px) scale(0.9);
 animation:bouquetIn 1s ease forwards,floatSoft 5s ease-in-out infinite;
-z-index:2;
+
+z-index:6;
+pointer-events:none;
 }
 @keyframes bouquetIn{to{opacity:1;transform:translateY(0) scale(1);}}
 @keyframes floatSoft{
@@ -181,18 +187,12 @@ setTimeout(showIntroText,800);
 
 function showIntroText(){
 let i=0;
-
-content.innerHTML=`
-<div class="text-box"><p id="introText"></p></div>
-<div id="photo-slot"></div>
-`;
-
+content.innerHTML=`<div class="text-box"><p id="introText"></p></div><div id="photo-slot"></div>`;
 let el=document.getElementById("introText");
 let slot=document.getElementById("photo-slot");
 
 function nextLine(){
 if(i<introLines.length){
-
 el.innerHTML+=introLines[i]+"<br>";
 
 if(i===introLines.length-1){
@@ -201,7 +201,6 @@ img.src="foto.jpg";
 img.id="mainPhoto";
 img.className="main-photo";
 slot.appendChild(img);
-
 setTimeout(()=>{
 img.style.opacity=1;
 img.style.transform="translateY(0)";
@@ -234,9 +233,7 @@ let now=Date.now();
 
 if(index<timeline.length && current>=timeline[index].time){
 if(now-lastShown>=minGap){
-setTimeout(()=>{
-showLine(timeline[index].text);
-},displayOffset);
+setTimeout(()=>showLine(timeline[index].text),displayOffset);
 lastShown=now;
 index++;
 }
@@ -418,7 +415,7 @@ let text=content.innerText;
 let words=text.split(" ").length;
 let readingTime=(words/200)*60*1000;
 
-let delay=readingTime+1200;
+let delay=readingTime*0.8;
 
 setTimeout(()=>{
 showBouquet();
