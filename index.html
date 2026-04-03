@@ -31,7 +31,6 @@ body{
   100%{background-position:0% 50%}
 }
 
-/* overlay */
 body::after{
   content:"";
   position:fixed;
@@ -42,7 +41,6 @@ body::after{
   left:0;
 }
 
-/* container */
 .container{
   min-height:100vh;
   display:flex;
@@ -50,8 +48,8 @@ body::after{
   justify-content:center;
   align-items:center;
   padding:20px;
-  z-index:2;
   position:relative;
+  z-index:2;
 }
 
 .text-box{
@@ -60,6 +58,7 @@ body::after{
   border-radius:18px;
   backdrop-filter: blur(6px);
   max-width:320px;
+  box-shadow:0 0 30px rgba(255,255,255,0.1);
 }
 
 h1{
@@ -73,7 +72,7 @@ p{
   font-weight:300;
 }
 
-/* button */
+/* BUTTON */
 button{
   margin-top:20px;
   padding:12px 25px;
@@ -84,9 +83,10 @@ button{
   font-weight:bold;
   width:80%;
   max-width:280px;
+  box-shadow:0 5px 20px rgba(0,0,0,0.3);
 }
 
-/* foto tengah */
+/* FOTO TENGAH */
 .center-img{
   width:240px;
   border-radius:18px;
@@ -100,12 +100,13 @@ button{
   to{opacity:1; transform:translateY(0)}
 }
 
-/* foto jatuh */
+/* FOTO JATUH */
 .photo-fall{
   position:fixed;
   top:-100px;
   border-radius:12px;
   opacity:0.75;
+  z-index:0;
   animation: fallPhoto linear forwards;
 }
 
@@ -113,7 +114,7 @@ button{
   to{ transform: translateY(110vh) rotate(360deg); }
 }
 
-/* love */
+/* LOVE */
 .fall{
   position:fixed;
   top:-10px;
@@ -186,11 +187,15 @@ function typeText(teks){
   },35);
 }
 
+/* SYNC TIMING */
+let waitTimes=[2000,1500,1500,1500,1500,1500,1500,1500,1800,2000,1500,1500,1500,2000,2200];
+
 function next(){
   if(isTyping) return;
 
   btn.innerHTML="Lanjut 👉";
   step++;
+  isTyping=true;
 
   if(step===1){
     lagu1.currentTime=25;
@@ -223,6 +228,9 @@ function next(){
     document.getElementById("main").appendChild(yesBtn);
     document.getElementById("main").appendChild(noBtn);
   }
+
+  let delay=waitTimes[step-1]||1500;
+  setTimeout(()=>{isTyping=false},delay);
 }
 
 function kabur(btn){
@@ -308,13 +316,17 @@ function yes(){
 
           let’s take this slowly… together ✨<br><br>
 
-          and I’m really glad… it’s you 💖
+          and I’m really glad… it’s you 💖<br><br>
+
+          <span style="font-size:13px;opacity:0.7;">
+            this might be simple… but it’s real 💖
+          </span>
         </p>
       </div>
       <img src="bouquet.png">
     </div>
     `;
-  },600);
+  },800);
 }
 
 photoRain();
