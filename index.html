@@ -13,7 +13,7 @@ body{margin:0;font-family:'Poppins',sans-serif;color:white;overflow:hidden}
 /* INTRO */
 #intro{position:fixed;inset:0;background:black;display:flex;justify-content:center;align-items:center;flex-direction:column;z-index:999}
 
-/* BACKGROUND */
+/* BG */
 #bg-layer{
 position:fixed;inset:0;z-index:0;
 background:linear-gradient(-45deg,#ff4d6d,#c9184a,#ff758f,#ff8fa3);
@@ -30,7 +30,7 @@ background:radial-gradient(circle, rgba(255,182,193,0.15), rgba(0,0,0,0.7));
 100%{background-position:0% 50%;}
 }
 
-/* LAYERS */
+/* LAYER */
 #falling-layer,#emoji-layer{position:fixed;inset:0;pointer-events:none}
 #falling-layer{z-index:1}
 #emoji-layer{z-index:2}
@@ -51,6 +51,8 @@ padding:20px;border-radius:18px;width:90%;
 line-height:1.7;
 box-shadow:0 10px 40px rgba(0,0,0,0.5);
 animation:fadeText 0.6s ease;
+max-height:65vh;
+overflow-y:auto;
 }
 @keyframes fadeText{
 from{opacity:0;transform:translateY(10px);}
@@ -64,12 +66,7 @@ padding:12px 18px;border:none;border-radius:25px;
 background:linear-gradient(135deg,#ff8fa3,#ff4d6d);
 color:white;font-weight:bold;margin-top:12px;
 }
-
-/* playful no */
-#noBtn:hover{
-transform:translateX(10px) scale(0.95);
-opacity:0.7;
-}
+#noBtn:hover{transform:translateX(10px) scale(0.95);opacity:0.7}
 
 /* PHOTO */
 #photo-slot{display:flex;justify-content:center;margin:12px 0}
@@ -93,13 +90,27 @@ transform:translateY(40px) scale(0.9);
 animation:bouquetIn 1s ease forwards,floatSoft 5s ease-in-out infinite;
 z-index:4;
 }
-@keyframes bouquetIn{
-to{opacity:1;transform:translateY(0) scale(1);}
-}
+@keyframes bouquetIn{to{opacity:1;transform:translateY(0) scale(1);}}
 @keyframes floatSoft{
 0%{transform:translateY(0);}
 50%{transform:translateY(-8px);}
 100%{transform:translateY(0);}
+}
+
+/* LOVE POPUP */
+#lovePopup{
+position:fixed;top:50%;left:50%;
+transform:translate(-50%,-50%) scale(0.8);
+font-size:26px;
+background:rgba(0,0,0,0.6);
+padding:16px 24px;
+border-radius:20px;
+opacity:0;
+z-index:10;
+animation:popLove 1s ease forwards;
+}
+@keyframes popLove{
+to{opacity:1;transform:translate(-50%,-50%) scale(1);}
 }
 
 /* MEMORY */
@@ -133,6 +144,13 @@ const emojiLayer=document.getElementById("emoji-layer");
 
 let index=0,check,started=false,fallInterval;
 
+const introLines=[
+"before this starts...",
+"read it slowly... okay? 🤍",
+"",
+"I made this for you"
+];
+
 const timeline=[
 {time:1.5,text:"hey... can you stay for a moment? 🥹"},
 {time:5,text:"aku bikin ini bukan karena iseng..."},
@@ -141,10 +159,10 @@ const timeline=[
 {time:19,text:"and somehow... you stay in my mind 😌"},
 {time:24,text:"aneh ya..."},
 {time:27,text:"you kinda live in my head rent free 😏"},
-{time:31,text:"so yeah..."},
-{time:34,text:"I like you 💖"},
-{time:38,text:"not just dikit..."},
-{time:41,text:"but in a way I actually care about you 🥹"}
+{time:32,text:"so yeah..."},
+{time:36.5,text:"I like you 💖"},
+{time:40,text:"not just dikit..."},
+{time:43,text:"but in a way I actually care about you 🥹"}
 ];
 
 function startApp(){
@@ -153,7 +171,24 @@ started=true;
 intro.style.display="none";
 main.style.display="flex";
 lagu1.play().catch(()=>{});
+setTimeout(showIntroText,800);
+}
+
+function showIntroText(){
+let i=0;
+content.innerHTML=`<div class="text-box"><p id="introText"></p></div>`;
+let el=document.getElementById("introText");
+
+function nextLine(){
+if(i<introLines.length){
+el.innerHTML+=introLines[i]+"<br>";
+i++;
+setTimeout(nextLine,1200);
+}else{
 setTimeout(startStory,1500);
+}
+}
+nextLine();
 }
 
 function startStory(){
@@ -252,10 +287,7 @@ attachPhoto();
 function confirmYes(){
 content.innerHTML=`
 <div class="text-box">
-<p>
-are you really sure...? 🥹<br><br>
-I’m not planning to let you go easily 😏💖
-</p>
+<p>are you really sure...? 🥹<br><br>I’m not planning to let you go easily 😏💖</p>
 </div>
 <button onclick="finalYes()">Yes, I’m sure 💕</button>
 <button onclick="showChoice()">Wait...</button>
@@ -266,10 +298,7 @@ attachPhoto();
 function confirmNo(){
 content.innerHTML=`
 <div class="text-box">
-<p>
-hmm... I don’t think that’s your real answer 😌<br><br>
-try again... I’ll wait 🥹💖
-</p>
+<p>hmm... I don’t think that’s your real answer 😌<br><br>try again... I’ll wait 🥹💖</p>
 </div>
 <button onclick="confirmYes()">Okay... yes 😳</button>
 `;
@@ -287,7 +316,7 @@ lagu1.pause();
 
 setTimeout(()=>{
 lagu2.play().catch(()=>{});
-},1000);
+},1200);
 
 content.innerHTML=`<div class="text-box"><p>...</p></div>`;
 
@@ -296,41 +325,30 @@ content.innerHTML=`
 <div class="text-box">
 <p>
 so... you really said yes 😏💖<br><br>
-
-jujur... I had a feeling you would,<br>
-but still, hearing it from you feels different 🤍<br><br>
-
-aku gak butuh sesuatu yang sempurna,<br>
-aku cuma butuh sesuatu yang nyata...<br>
-dan entah kenapa, itu kerasa ada di kamu 🥹<br><br>
-
-I don’t know how far this will go,<br>
-but I know one thing for sure...<br>
-I want to go through it with you 💖<br><br>
-
-aku bakal ada,<br>
-bukan cuma di saat semuanya mudah,<br>
-tapi juga di saat semuanya gak selalu baik<br><br>
-
-I’ll try,<br>
-not because I have to...<br>
-but because I genuinely want to 🤍<br><br>
-
+jujur, I had a feeling you would...<br>
+but this means a lot to me 🤍<br><br>
+aku gak butuh yang sempurna,<br>
+aku cuma butuh yang nyata... dan itu kamu 🥹<br><br>
+I’ll be there, not only when it’s easy,<br>
+but also when it’s not 💖<br><br>
 because you’re not just someone I like...<br>
-you’re someone I choose,<br>
-and someone I want to keep choosing 💖<br><br>
-
-so now that you’re here...<br>
-don’t go anywhere, okay? 😌💕<br><br>
-
+you’re someone I choose 🤍<br><br>
+so stay with me, okay? 😌💕<br><br>
 and yeah... I’m really glad it’s you 🤍
 </p>
 </div>
 
 <button onclick="showMemory()">Kenangan 💖</button>
-
 <img src="bouquet.png" class="bouquet">
 `;
+
+setTimeout(()=>{
+let popup=document.createElement("div");
+popup.id="lovePopup";
+popup.innerHTML="Love you 💕💕💕";
+document.body.appendChild(popup);
+},4500);
+
 },1500);
 }
 
